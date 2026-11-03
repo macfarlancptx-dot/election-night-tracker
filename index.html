@@ -325,14 +325,14 @@ function toast(msg,party){var t=document.getElementById("toasts"),el=document.cr
 // ---------- sound ----------
 var AC=null,SOUND=false;try{SOUND=localStorage.getItem("entrackerSound")==="1"}catch(e){}
 function actx(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}if(AC.state==="suspended")AC.resume();return AC}
-function eagle(){if(!SOUND)return;var a=actx();if(!a)return;var t=a.currentTime+.05;
+function eagleTone(){if(!SOUND)return;var a=actx();if(!a)return;var t=a.currentTime+.05;
   for(var k=0;k<1;k++){var s0=t+k*.8,o=a.createOscillator(),g=a.createGain(),f=a.createBiquadFilter(),l=a.createOscillator(),lg=a.createGain();
     o.type="triangle";f.type="lowpass";f.Q.value=1;f.frequency.value=3000;
     o.frequency.setValueAtTime(1600,s0);o.frequency.exponentialRampToValueAtTime(3400,s0+.12);o.frequency.exponentialRampToValueAtTime(2500,s0+.45);o.frequency.exponentialRampToValueAtTime(1400,s0+.7);
     l.frequency.value=22;lg.gain.value=60;l.connect(lg);lg.connect(o.frequency);
     g.gain.setValueAtTime(.0001,s0);g.gain.exponentialRampToValueAtTime(.12,s0+.06);g.gain.exponentialRampToValueAtTime(.07,s0+.45);g.gain.exponentialRampToValueAtTime(.0001,s0+.72);
     o.connect(f);f.connect(g);g.connect(a.destination);o.start(s0);o.stop(s0+.75);l.start(s0);l.stop(s0+.75)}}
-function fife(){if(!SOUND)return;var a=actx();if(!a)return;
+function fifeTone(){if(!SOUND)return;var a=actx();if(!a)return;
   var F={D4:293.66,E4:329.63,Fs4:369.99,G4:392,A4:440,B4:493.88,C5:523.25};
   var M=[["G4",1],["G4",1],["A4",1],["B4",1],["G4",1],["B4",1],["A4",1],["D4",1],["G4",1],["G4",1],["A4",1],["B4",1],["G4",2],["Fs4",2],
          ["G4",1],["G4",1],["A4",1],["B4",1],["C5",1],["B4",1],["A4",1],["G4",1],["Fs4",1],["D4",1],["E4",1],["Fs4",1],["G4",2],["G4",2]];
@@ -345,6 +345,11 @@ function fife(){if(!SOUND)return;var a=actx();if(!a)return;
     if(n[1]>=1){var b=a.createBuffer(1,a.sampleRate*.05,a.sampleRate),dd=b.getChannelData(0);for(var i=0;i<dd.length;i++)dd[i]=(Math.random()*2-1)*(1-i/dd.length);
       var ns=a.createBufferSource(),ng=a.createGain();ns.buffer=b;ng.gain.value=.018;ns.connect(ng);ng.connect(a.destination);ns.start(t)}
     t+=d});}
+function pickVoice(){try{var vs=speechSynthesis.getVoices();var en=vs.filter(function(v){return/^en(-|_)US/i.test(v.lang)});return en.filter(function(v){return/Samantha|Alex|Google US|Aaron|Nicky/i.test(v.name)})[0]||en[0]||null}catch(e){return null}}
+function cheer(n){if(!SOUND)return;var ss=window.speechSynthesis;if(!ss){return}
+  try{ss.cancel();var v=pickVoice();for(var i=0;i<n;i++){var u=new SpeechSynthesisUtterance("U! S! A!");u.rate=1.1;u.pitch=1.25;u.volume=1;if(v)u.voice=v;ss.speak(u)}}catch(e){}}
+function eagle(){cheer(1)}
+function fife(){cheer(3)}
 function soundBtn(){return'<button id="snd" style="border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);border-radius:20px;padding:5px 10px;font:700 12px Inter">'+(SOUND?"🔊 On":"🔇 Sound")+'</button>'}
 
 // ---------- change detection ----------
@@ -512,7 +517,7 @@ function keysHTML(){
     h+='<div class="key '+k[3]+(S.k[i]?" on":"")+'" data-k="'+i+'"><div class="box">'+(S.k[i]?"✓":"")+'</div><div class="t">'+p+' CT</div><div class="tx"><b>'+esc(k[1])+'</b>'+(k[2]?'<span>→ '+esc(k[2])+'</span>':'')+'</div></div>'});
   h+='</div>'+countingHTML()+quoteHTML()+'<div class="card"><b>Live results</b><div class="links"><a href="https://www.google.com/search?q=2026+election+results">Google (AP data)</a><a href="https://decisiondeskhq.com">Decision Desk HQ</a><a href="https://www.270towin.com">270toWin</a></div>'+
     '<div class="note">Benchmarks from your charts: DDHQ, Chuck Todd, Karl Rove (WSJ), Hans Nichols (Axios), Charlie Cook, Cook Political Report, 270toWin. Ranges are judgment calls, not modeled odds.</div>'+
-    '<button class="ghost" id="demo">Test the fireworks</button><button class="ghost" id="demo2">Test the tsunami</button><button class="ghost" id="demo3">Test the flyover</button><button class="ghost" id="demo4">Test the sound 🦅</button><button class="ghost" id="reset">Clear all entries</button><div class="confirm" id="confirm">Clear everything? <button class="ghost" id="yes" style="margin:0;color:var(--rip)">Yes, clear</button><button class="ghost" id="no" style="margin:0">Cancel</button></div></div>';
+    '<button class="ghost" id="demo">Test the fireworks</button><button class="ghost" id="demo2">Test the tsunami</button><button class="ghost" id="demo3">Test the flyover</button><button class="ghost" id="demo4">Test the cheer 🇺🇸</button><button class="ghost" id="reset">Clear all entries</button><div class="confirm" id="confirm">Clear everything? <button class="ghost" id="yes" style="margin:0;color:var(--rip)">Yes, clear</button><button class="ghost" id="no" style="margin:0">Cancel</button></div></div>';
   return h;
 }
 
