@@ -175,7 +175,7 @@ button.ghost{border:1px solid var(--line);background:rgba(255,255,255,.05);color
 <canvas id="fx"></canvas>
 <div id="toasts"></div>
 <div id="app"></div>
-<script id="state" type="application/json">{"updated":0,"s":{},"h":{},"hu":{},"t":{},"k":{},"c":{},"auto":{}}</script>
+<script id="state" type="application/json">{"updated":1793748902863,"s":{},"h":{},"hu":{},"t":{},"k":{},"c":{},"auto":{"at":"5:35 PM CT","note":"Live updates connected"}}</script>
 <script id="app-script">
 (function(){
 var COLS=["Red Riptide","Blue Tide","Blue Wave","Blue Tsunami"];
@@ -209,6 +209,7 @@ var HOU=[
 ["OH-10","R",0,2,"7:30","Turner"],["ME-02","D",0,2,"8:00","Open seat"],["TX-15","R",1,2,"8:00","De La Cruz"],
 ["VA-05","R",0,3,"7:00","McGuire"],["FL-27","R",0,3,"7:00","Salazar"],["GA-01","R",0,3,"7:00","Open seat"],["SC-02","R",0,3,"7:00","Wilson"],
 ["NC-09","R",0,3,"7:30","Hudson"],["NC-05","R",0,3,"7:30","Foxx"],["NJ-02","R",0,3,"8:00","Van Drew"],
+["PA-07","R",0,-1,"8:00","Mackenzie"],["PA-10","R",0,-1,"8:00","Perry"],["MO-02","R",0,-1,"8:00","St. Louis suburbs"],["OH-15","R",0,-1,"7:30","Carey"],["WI-01","R",0,-1,"9:00","Steil"],
 ["UT-01","R",1,-1,"10:00","McAdams (D) v. Owen (R)"]
 ];
 var TESTS=[
@@ -246,9 +247,9 @@ var QUOTES=[
 ["A man without a vote is a man without protection.","Lyndon B. Johnson"],
 ["Bad officials are elected by good citizens who do not vote.","George Jean Nathan"]
 ];
-var NOTES={"FL": "Special election for Rubio's old seat. A Trump-won state, so even keeping it close is a Dem win. Your Keys: still uncalled by 8 CT = good Dem night.", "GA": "The only Dem-held Senate seat in a state Trump won; Cook rates it Lean D. Ossoff under 5 points means no wave.", "SC": "A Solid R seat per Cook. A big GOP win means Republican voters came home; a close race means the polls missed toward Dems.", "NC": "Open seat (Tillis retired) and Cook's likeliest flip. Your chart's first big tell: called for Cooper right at 6:30 CT = the wave is real.", "OH": "Special election for Vance's old seat: former Sen. Sherrod Brown vs. appointed Sen. Husted. Cook Toss Up. Brown running 4+ ahead of his 2024 pace = likely flip.", "ME": "Collins is the GOP's most durable incumbent and has beaten bad polls before. Ranked-choice counting could take days.", "NH": "Dem-held open seat (Shaheen retiring). A Sununu win would be a GOP pickup that raises the bar for Dems elsewhere.", "TX": "Cook Toss Up. Watch whether Gov. Abbott runs well ahead of Paxton (ticket-splitting) and whether Talarico beats Harris '24 in South Texas.", "MI": "Dem-held open seat (Peters retiring), Republicans' best pickup chance. El-Sayed lagging Harris '24 in Detroit = Dem trouble.", "KS": "A deep-red state rated Toss Up by Cook. Hamilton winning Johnson County (KC suburbs) by 20+ = Kansas is in play.", "MS": "Cook rates it Solid R. Only in reach in a Tsunami night; a close count here would be a shock signal.", "IA": "Open seat (Ernst retiring), Cook Toss Up. Farm-county GOP turnout below 2022 = trouble for Republicans.", "NE": "Osborn is an independent, not a Democrat, and has said he won't caucus with either party. A win still costs Republicans a seat.", "MN": "Dem-held open seat (Smith retiring) in a Harris-won state, but late polling moved toward Republicans. A loss here would offset a flip elsewhere.", "AK": "Cook Toss Up and a possible tipping point for Senate control. Peltola led late polls by 2 to 7. Ranked-choice tabulation won't start until Nov. 18.", "VA-07": "Dem-held swing seat. Losing it at 6 CT would be the first Red Riptide signal. Virginia counts fast, so it's the night's best early read.", "IN-01": "NW Indiana Dem seat, a classic first-hour bellwether. A loss = riptide.", "GA-02": "Long-held rural Georgia Dem seat. A loss = riptide.", "OH-01": "Cincinnati Dem seat redrawn by Ohio Republicans to be tougher. A loss = riptide.", "OH-13": "Akron-area Dem seat, redrawn. A loss = riptide.", "FL-14": "Tampa Dem seat redrawn by Florida Republicans. Part of your FL 4-for-4 test; a Dem hold blunts the redraw.", "FL-22": "Dem-held open seat, redrawn. Part of your FL 4-for-4 test.", "FL-25": "Broward County Dem seat, redrawn. Part of your FL 4-for-4 test.", "VA-02": "Virginia Beach GOP swing seat. An early Tide-level flip, known by about 7 CT.", "SC-01": "Charleston-area GOP seat, open. A Dem win = Tide.", "NC-01": "Redrawn by North Carolina Republicans specifically to flip it. Davis holding on = a strong Dem night.", "NC-11": "Western North Carolina GOP seat, open. A Dem win = Tide.", "OH-07": "Northeast Ohio GOP seat. A Dem win = Tide.", "OH-09": "Toledo Dem seat redrawn to lean Republican. Kaptur holding = Tide.", "PA-08": "Scranton/Wilkes-Barre seat Bresnahan flipped in 2024. Classic Tide target.", "MI-04": "West Michigan GOP seat. A Dem pickup here shows the Tide reaching into safer territory.", "MI-07": "Lansing-area swing seat that flipped Republican in 2024.", "MI-10": "Macomb County GOP seat, open (John James ran for governor).", "NJ-07": "Suburban New Jersey swing seat. Classic Tide target.", "PA-01": "Bucks County. Fitzpatrick routinely outruns his party; Rove flags it. If he loses, the Tide is strong.", "NY-17": "Hudson Valley swing seat and a top Dem target.", "AZ-01": "Scottsdale/Phoenix GOP seat, open (Schweikert ran for governor). Late count.", "AZ-06": "Tucson-area GOP swing seat. Late count.", "CO-08": "Northern Denver suburbs; flipped Republican in 2024 by a narrow margin.", "WI-03": "Western Wisconsin GOP swing seat.", "NE-02": "Omaha. Harris won it in 2024 and it's open (Bacon retiring). One of the likeliest Dem flips.", "IA-01": "Miller-Meeks won by under 1,000 votes in 2024.", "IA-02": "Northeast Iowa GOP seat, open (Hinson is running for Senate).", "IA-03": "Des Moines-area GOP swing seat.", "CO-05": "Colorado Springs GOP seat on your chart's Tide list. A Dem win here is a reach.", "MT-01": "Western Montana GOP seat, open. Polls close 9 CT.", "CA-22": "Central Valley; redrawn by Prop 50 to favor Dems. California counts slowly, so expect days.", "CA-48": "Redrawn by Prop 50; GOP-held open seat. California counts slowly, so expect days.", "KY-06": "Lexington-area GOP seat, open (Barr ran for Senate). Your 5 CT test: GOP by 10+ = red signal; a flip = Wave.", "IN-05": "Indianapolis suburbs (Hamilton County). Your 5 CT test: GOP by 15+ = red signal; a flip = Wave.", "FL-09": "Orlando-area Dem seat redrawn to lean GOP; part of your FL test. Soto holding = Wave.", "FL-07": "Central Florida GOP seat, open. A flip = Wave.", "VA-01": "Long-held GOP seat. A flip around 7 CT = Wave signal.", "OH-10": "Dayton GOP seat. Rove flags it as a wave marker.", "ME-02": "Rural, Trump-won Dem seat, open (Golden retiring). A Dem hold = Wave.", "TX-15": "South Texas, redrawn. A flip means Latino voters swinging back to Dems.", "VA-05": "Chuck Todd's tell: a Dem win in this central Virginia seat = Tsunami.", "FL-27": "Miami. A flip means Hispanic suburbs swinging hard = Tsunami.", "GA-01": "Coastal Georgia GOP seat, open (Carter ran for Senate). Tsunami-only.", "SC-02": "Long-held GOP seat. Tsunami-only.", "NC-09": "Hudson chairs the NRCC, the House GOP campaign arm, so a flip would be symbolic. Tsunami-only.", "NC-05": "Deep-red northwest North Carolina. Tsunami-only.", "NJ-02": "South Jersey GOP seat. Tsunami-only.", "UT-01": "Brand-new Salt Lake City seat drawn by court order and rated Solid D. A near-certain Dem pickup that counts toward 218, so it's not a wave signal."};
+var NOTES={"FL": "Fast-count state: most ballots are in within an hour of closing. Governor's race still uncalled at 8 CT is a very good sign for Dems (Todd). A GOP sweep statewide by 5+ is a warning.", "GA": "Ossoff vs. Rep. Mike Collins; Cook now Likely D. Metro Atlanta counts last, so early GOP leads mean little. Under 50% means a runoff.", "SC": "Darline Graham (R, appointed) vs. Annie Andrews. Cook and Sabato: Likely R. Strong Black turnout is a good sign; an early call for Graham is a warning.", "NC": "Open seat (Tillis retired), Cook Likely D. A comfortable, early Cooper call means the wave is real. Cooper struggling makes the whole Senate path shaky.", "OH": "Special election for Vance's old seat. Silver average Brown +3.7. Brown winning comfortably means Republicans should worry elsewhere too.", "ME": "Collins is the GOP's most durable incumbent. Watch ME-02 as the leading indicator. Ranked-choice counting could take days.", "NH": "Dem-held open seat (Shaheen retiring). A Sununu win would be a GOP pickup that raises the bar for Dems elsewhere.", "TX": "Silver average Talarico +2.4. Gov. Abbott still uncalled at 10 CT means the GOP has a problem (Todd). Big Democratic metros report late, so expect a long night.", "MI": "Dem-held open seat. A call for El-Sayed before 11 CT is a good sign; Rogers running ahead of his polls is a GOP-surprise warning. Detroit reports late, so don't panic early.", "KS": "Cook Toss Up. If Marshall can't get a quick call, that's a good sign for Dems. Part of Todd's 'tsunami trio' with Nebraska and Texas: one GOP loss there = very big night, two = historic.", "MS": "Cook rates it Solid R. Only in reach in a Tsunami night; a close count here would be a shock signal.", "IA": "Open seat, Sabato toss-up. Todd's 'coma state' test: Dems sweeping Senate, governor and all three House seats means a wave. Losing the Senate race narrows the Senate path.", "NE": "Independent Osborn, who says he won't caucus with either party. Part of Todd's 'tsunami trio' with Kansas and Texas: one GOP loss there = very big night, two = historic.", "MN": "Dem-held open seat that should be safe. A nail-biter here while others go blue points to the candidates, not the climate.", "AK": "Cook Toss Up and a possible tipping point for Senate control. Peltola led late polls by 2 to 7. Ranked-choice tabulation won't start until Nov. 18.", "VA-07": "Vindman's seat should be a routine Dem hold. A loss would be the first Red Riptide signal.", "IN-01": "Mrvan's NW Indiana seat, in the part of the state that closes at 6 CT. Called quickly = good sign; too close to call = Republicans beating expectations (Todd).", "GA-02": "Long-held rural Georgia Dem seat. A loss = riptide.", "OH-01": "Cincinnati Dem seat redrawn by Ohio Republicans to be tougher. A loss = riptide.", "OH-13": "Akron-area Dem seat, redrawn. A loss = riptide.", "FL-14": "Castor's Tampa seat, redrawn by Florida Republicans. Castor and Moskowitz both holding = near-certain Dem House majority (DDHQ).", "FL-22": "Dem-held open seat, redrawn; a toss-up stretch seat in your FL 4-for-4 test.", "FL-25": "Moskowitz's Broward seat, redrawn. Castor and Moskowitz both holding = near-certain Dem House majority (DDHQ).", "VA-02": "Todd's SMALL test: Luria (D) v Kiggans (R), Luria favored. A Kiggans hold means no wave; DDHQ's Dem majority odds would fall below 50%.", "SC-01": "Charleston-area GOP seat, open. A Dem win = Tide.", "NC-01": "Redrawn to flip it. Davis holding AND NC-11 flipping = Dem majority odds 90%+ (DDHQ). Losing both NC seats drops them to about 60%.", "NC-11": "Western NC open GOP seat; Ager (D) flipping it, with NC-01 holding, = majority odds 90%+ (DDHQ).", "OH-07": "Poindexter (D) v Max Miller (R). A Poindexter win = Tide.", "OH-09": "Kaptur's Toledo seat, redrawn redder. Kaptur holding = Tide.", "PA-08": "Bresnahan (Trump +8) losing to Cognetti = a wave.", "MI-04": "West Michigan GOP seat. A Dem pickup here shows the Tide reaching into safer territory.", "MI-07": "Lansing-area swing seat that flipped Republican in 2024.", "MI-10": "Macomb County GOP seat, open (John James ran for governor).", "NJ-07": "Suburban New Jersey swing seat. Classic Tide target.", "PA-01": "Fitzpatrick routinely outruns his party. If he finally falls, it's a wave.", "NY-17": "Hudson Valley swing seat and a top Dem target.", "AZ-01": "Open GOP seat, Cook Lean D. Arizona counts slowly; expect days, not hours.", "AZ-06": "Tucson-area GOP swing seat. Late count.", "CO-08": "Northern Denver suburbs; flipped Republican in 2024 by a narrow margin.", "WI-03": "Western Wisconsin GOP swing seat.", "NE-02": "Omaha, open (Bacon retiring), Cook Likely D. One of the likeliest flips.", "IA-01": "Miller-Meeks won by under 1,000 votes in 2024. Part of Todd's Iowa sweep test.", "IA-02": "Open seat (Hinson running for Senate). Part of Todd's Iowa sweep test.", "IA-03": "Nunn's Des Moines-area seat. Part of Todd's Iowa sweep test.", "CO-05": "Crank's Colorado Springs seat, Cook Lean R: a reach seat. A Dem win means the wave is deep.", "MT-01": "Western Montana GOP seat, open. Polls close 9 CT.", "CA-22": "Central Valley; redrawn by Prop 50 to favor Dems. California counts slowly, so expect days.", "CA-48": "Redrawn by Prop 50; GOP-held open seat. California counts slowly, so expect days.", "KY-06": "Alvarado (R) v Dembo (D). Trump +15, polls roughly tied; Cook's Erin Covey calls it the bellwether for a big blue wave. A Dembo win = DDHQ puts Dem House odds at 96%+, Todd says 230+ seats.", "IN-05": "Spartz (R) v J.D. Ford (D). Ford near 49 to 50% is Todd's wave mark; Ford stuck at 45 to 47% (where polls had him) is a warning.", "FL-09": "Soto's seat, redrawn to Trump +16. A stretch hold; part of your FL 4-for-4 test.", "FL-07": "Central Florida GOP seat, open. A flip = Wave.", "VA-01": "Todd's MEDIUM test: Taylor (D) v Wittman (R), Trump +5, Cook toss-up. A Taylor win is the classic wave test, about 235 seats (Todd). Wittman won by ~13 in 2024, so even close is good.", "OH-10": "Dayton GOP seat. Rove flags it as a wave marker.", "ME-02": "Open seat, Dunlap (D) v LePage (R), Trump +9. Dunlap close or ahead is also a leading indicator for the Maine Senate race.", "TX-15": "South Texas, redrawn. A Pulido (D) flip means Latino voters swinging back.", "VA-05": "Todd's LARGE test: Perriello (D) v McGuire (R), Trump +12. A Perriello win is Tsunami territory, about 250 seats (Todd).", "FL-27": "Salazar's Miami seat: the Latino-backlash test. A flip = Tsunami.", "GA-01": "Coastal Georgia GOP seat, open (Carter ran for Senate). Tsunami-only.", "SC-02": "Long-held GOP seat. Tsunami-only.", "NC-09": "Tsunami tell: Hudson chairs the NRCC, the House GOP campaign arm.", "NC-05": "Deep-red northwest North Carolina. Tsunami-only.", "NJ-02": "South Jersey GOP seat. Tsunami-only.", "UT-01": "Brand-new Salt Lake City seat drawn by court order and rated Solid D. A near-certain Dem pickup that counts toward 218, so it's not a wave signal.", "MO-02": "St. Louis suburbs, GOP-held. Polls close 7 CT. A Dem win here = a deep wave reaching the Missouri suburbs.", "PA-07": "Mackenzie (R), Lehigh Valley bellwether, Cook Lean D. A Dem flip is the expected night, and part of your PA 2-for-2 test.", "PA-10": "Perry (R), Cook Lean D. A Dem flip is the expected night, and part of your PA 2-for-2 test.", "WI-01": "Steil (R), Cook Lean R: a reach seat. A Dem win = the wave is deep.", "OH-15": "Carey (R): a Tsunami tell."};
 var STNAME={AK:"Alaska",FL:"Florida",GA:"Georgia",SC:"South Carolina",NC:"North Carolina",OH:"Ohio",ME:"Maine",NH:"New Hampshire",TX:"Texas",MI:"Michigan",KS:"Kansas",MS:"Mississippi",IA:"Iowa",NE:"Nebraska",MN:"Minnesota"};
-var AB={UT:"Utah",AK:"Alaska",AZ:"Arizona",CA:"California",CO:"Colorado",FL:"Florida",GA:"Georgia",IA:"Iowa",IN:"Indiana",KY:"Kentucky",ME:"Maine",MI:"Michigan",MT:"Montana",NC:"North Carolina",NE:"Nebraska",NJ:"New Jersey",NY:"New York",OH:"Ohio",PA:"Pennsylvania",SC:"South Carolina",TX:"Texas",VA:"Virginia",WI:"Wisconsin"};
+var AB={MO:"Missouri",UT:"Utah",AK:"Alaska",AZ:"Arizona",CA:"California",CO:"Colorado",FL:"Florida",GA:"Georgia",IA:"Iowa",IN:"Indiana",KY:"Kentucky",ME:"Maine",MI:"Michigan",MT:"Montana",NC:"North Carolina",NE:"Nebraska",NJ:"New Jersey",NY:"New York",OH:"Ohio",PA:"Pennsylvania",SC:"South Carolina",TX:"Texas",VA:"Virginia",WI:"Wisconsin"};
 
 // ---------- state & sync ----------
 var HEAD_FONTS=document.getElementById("app-fonts").outerHTML,HEAD_STYLE=document.getElementById("app-style").outerHTML,SCRIPT_SRC=document.getElementById("app-script").textContent;
@@ -321,6 +322,31 @@ function tick(){
 function toast(msg,party){var t=document.getElementById("toasts"),el=document.createElement("div");el.className="toast";el.innerHTML='<i style="background:'+(party==="R"?"var(--r)":party==="I"?"var(--i)":party==="G"?"var(--gold)":"var(--d)")+'"></i><span>'+esc(msg)+'</span>';t.appendChild(el);while(t.children.length>3)t.firstChild.remove();
   setTimeout(function(){el.classList.add("out");setTimeout(function(){el.remove()},400)},4200)}
 
+// ---------- sound ----------
+var AC=null,SOUND=false;try{SOUND=localStorage.getItem("entrackerSound")==="1"}catch(e){}
+function actx(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}if(AC.state==="suspended")AC.resume();return AC}
+function eagle(){if(!SOUND)return;var a=actx();if(!a)return;var t=a.currentTime+.05;
+  for(var k=0;k<2;k++){var s0=t+k*.8,o=a.createOscillator(),g=a.createGain(),f=a.createBiquadFilter(),l=a.createOscillator(),lg=a.createGain();
+    o.type="sawtooth";f.type="bandpass";f.Q.value=5;f.frequency.value=2700;
+    o.frequency.setValueAtTime(1600,s0);o.frequency.exponentialRampToValueAtTime(3400,s0+.12);o.frequency.exponentialRampToValueAtTime(2500,s0+.45);o.frequency.exponentialRampToValueAtTime(1400,s0+.7);
+    l.frequency.value=34;lg.gain.value=140;l.connect(lg);lg.connect(o.frequency);
+    g.gain.setValueAtTime(.0001,s0);g.gain.exponentialRampToValueAtTime(.45,s0+.04);g.gain.exponentialRampToValueAtTime(.25,s0+.45);g.gain.exponentialRampToValueAtTime(.0001,s0+.72);
+    o.connect(f);f.connect(g);g.connect(a.destination);o.start(s0);o.stop(s0+.75);l.start(s0);l.stop(s0+.75)}}
+function fife(){if(!SOUND)return;var a=actx();if(!a)return;
+  var F={D4:293.66,E4:329.63,Fs4:369.99,G4:392,A4:440,B4:493.88,C5:523.25};
+  var M=[["G4",1],["G4",1],["A4",1],["B4",1],["G4",1],["B4",1],["A4",1],["D4",1],["G4",1],["G4",1],["A4",1],["B4",1],["G4",2],["Fs4",2],
+         ["G4",1],["G4",1],["A4",1],["B4",1],["C5",1],["B4",1],["A4",1],["G4",1],["Fs4",1],["D4",1],["E4",1],["Fs4",1],["G4",2],["G4",2]];
+  var t=a.currentTime+.08,u=.19;
+  M.forEach(function(n){var o=a.createOscillator(),g=a.createGain(),v=a.createOscillator(),vg=a.createGain(),d=n[1]*u;
+    o.type="triangle";o.frequency.value=F[n[0]]*2;v.frequency.value=6;vg.gain.value=6;v.connect(vg);vg.connect(o.frequency);
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.28,t+.02);g.gain.setValueAtTime(.24,t+d*.7);g.gain.exponentialRampToValueAtTime(.0001,t+d*.95);
+    o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d);v.start(t);v.stop(t+d);
+    /* snare tap on each beat */
+    if(n[1]>=1){var b=a.createBuffer(1,a.sampleRate*.05,a.sampleRate),dd=b.getChannelData(0);for(var i=0;i<dd.length;i++)dd[i]=(Math.random()*2-1)*(1-i/dd.length);
+      var ns=a.createBufferSource(),ng=a.createGain();ns.buffer=b;ng.gain.value=.07;ns.connect(ng);ng.connect(a.destination);ns.start(t)}
+    t+=d});}
+function soundBtn(){return'<button id="snd" style="border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);border-radius:20px;padding:5px 10px;font:700 12px Inter">'+(SOUND?"🔊 On":"🔇 Sound")+'</button>'}
+
 // ---------- change detection ----------
 function snap(){var sc={},hc={};SEN.forEach(function(r){var c=(S.s[r[0]]||{}).call;if(c)sc[r[0]]=c});HOU.forEach(function(r){if(S.h[r[0]])hc[r[0]]=S.h[r[0]]});
   var ss=senState(),hs=houseState(),sd=n(S.c.sd),hd=n(S.c.hd);
@@ -341,16 +367,16 @@ function celebrate(prev,cur,quiet){
   var newCalls=[];Object.keys(cur.sc).forEach(function(k){if(prev.sc[k]!==cur.sc[k])newCalls.push(k)});
   newCalls.forEach(function(k,i){var row=SEN.filter(function(r){return r[0]===k})[0],p=cur.sc[k],nm=row[1].split(" v. ");
     var who=p==="R"?nm[0]:nm[1];var flip=(k!=="NE"&&p!==row[6])||(k==="NE"&&p==="I");
-    toast(k+" Senate called: "+who.replace(/ \(.\)/,"")+(flip?" · FLIP":""),p);setTimeout(function(){fireworks(p,flip?"med":"small")},i*700)});
+    toast(k+" Senate called: "+who.replace(/ \(.\)/,"")+(flip?" · FLIP":""),p);setTimeout(function(){fireworks(p,flip?"med":"small");if(flip&&p!=="R")eagle()},i*700)});
   // house
   var hNew=Object.keys(cur.hc).filter(function(k){return prev.hc[k]!==cur.hc[k]});
   hNew.slice(0,4).forEach(function(k,i){var row=HOU.filter(function(r){return r[0]===k})[0],p=cur.hc[k];var flip=p!==row[1];
-    if(quiet||flip||hNew.length<=2){toast(k+" "+(p==="D"?"Democrat":"Republican")+(flip?" · FLIP":" · hold"),p);if(flip)setTimeout(function(){fireworks(p,"small")},300+i*600)}});
+    if(quiet||flip||hNew.length<=2){toast(k+" "+(p==="D"?"Democrat":"Republican")+(flip?" · FLIP":" · hold"),p);if(flip)setTimeout(function(){fireworks(p,"small");if(p==="D"&&i===0)eagle()},300+i*600)}});
   if(hNew.length>4)toast((hNew.length-4)+" more House results","G");
   // verdict shifts
   if(cur.sv!==prev.sv&&cur.sv>=0){toast("Senate now tracking "+COLS[cur.sv],cur.sv===0?"R":"D");if(cur.sv>prev.sv&&cur.sv>=2)med=true}
   if(cur.hv!==prev.hv&&cur.hv>=0){toast("House now tracking "+COLS[cur.hv],cur.hv===0?"R":"D");if(cur.hv>prev.hv&&cur.hv>=2)med=true}
-  if(med&&!big)setTimeout(function(){fireworks("D","med")},400);
+  if(med&&!big)setTimeout(function(){fireworks("D","med");fife()},400);
   if(big)bigShow(big);
   var tw=null;
   if(cur.tsH&&cur.tsS&&!(prev.tsH&&prev.tsS))tw="both";else if(cur.tsH&&!prev.tsH)tw="house";else if(cur.tsS&&!prev.tsS)tw="senate";
@@ -365,7 +391,7 @@ function tsunami(which){
   document.body.appendChild(el);
   function close(){if(el.classList.contains("out"))return;el.classList.add("out");setTimeout(function(){el.remove()},1400)}
   el.querySelector("button").onclick=close;setTimeout(close,12000);
-  setTimeout(function(){fireworks("D","med")},2000);
+  setTimeout(function(){fireworks("D","med")},2000);eagle();setTimeout(fife,1600);
 }
 function bigShow(key){
   var title={both:"Democrats win control of Congress",house:"Democrats win the House",senate:"Democrats win the Senate"}[key];
@@ -374,7 +400,7 @@ function bigShow(key){
   ov=document.createElement("div");ov.id="ov";ov.className=key==="both"?"bBoth":"bD";ov.style.background="radial-gradient(circle at 50% 40%,rgba(61,123,255,.55),rgba(7,11,26,.94) 70%)";
   ov.innerHTML='<div class="eyebrow" style="color:var(--gold);margin-bottom:10px">Breaking</div><h2>'+title+'</h2><p>'+sub+'</p><button>Back to the tracker</button>';
   document.body.appendChild(ov);ov.querySelector("button").onclick=function(){ov.remove()};
-  fireworks(key==="both"?"all":"D","big");setTimeout(function(){fireworks("gold","med")},2600);
+  fireworks(key==="both"?"all":"D","big");setTimeout(function(){fireworks("gold","med")},2600);fife();setTimeout(eagle,6000);
   if(key==="both"){setTimeout(function(){var o=document.getElementById("ov");if(o)o.remove();flyover()},4500)}
 }
 
@@ -403,7 +429,7 @@ var TAB="senate",QI=Math.floor(Math.random()*QUOTES.length),lastV={};
 function readHash(){var h=(location.hash||"").replace("#","");TAB=["senate","house","keys"].indexOf(h)>=0?h:"senate"}
 function rlink(q){return'<a class="rlink" href="https://www.google.com/search?q='+encodeURIComponent(q)+'">Live results ↗</a>'}
 function render(){
-  var html='<header><div class="top"><h1><span>Election Night</span></h1><div class="live"><i></i>LIVE TRACKER</div></div>'+
+  var html='<header><div class="top"><h1><span>Election Night</span></h1><div style="display:flex;gap:8px;align-items:center">'+soundBtn()+'<div class="live"><i></i>LIVE</div></div></div>'+
     '<div id="tlwrap">'+timelineHTML()+'</div>'+
     (S.auto&&S.auto.at?'<div class="auto">Auto-updated '+esc(S.auto.at)+(S.auto.note?' · '+esc(S.auto.note):'')+'</div>':'')+
     '<nav>'+["senate","house","keys"].map(function(t){return'<a href="#'+t+'" class="'+(TAB===t?"on":"")+'">'+(t==="keys"?"Keys":t[0].toUpperCase()+t.slice(1))+'</a>'}).join("")+'</nav></header><main>'+bannersHTML();
@@ -463,10 +489,10 @@ function houseHTML(){
   var z=houseState(),cols=z.cols;
   var h=meterHTML(false)+'<div class="card"'+(z.reds?' style="border-color:rgba(255,77,94,.6)"':'')+'><div class="eyebrow">House is tracking toward</div><div class="verdict '+vcls(z.v)+popIf("h",z.v)+'">'+z.label+'</div>'+
     '<div class="sub">Highest column where Dems have won at least half of the races decided so far.'+(z.reds?' <b style="color:var(--rip)">'+z.reds+' red signal'+(z.reds>1?"s":"")+'.</b>':'')+'</div>'+
-    distBar([cols[0][0],cols[1][0],cols[2][0],cols[3][0]],["Riptide hits","Tide D wins","Wave D wins","Tsunami D wins"])+'</div>'+quoteHTML()+
+    distBar([cols[0][0],cols[1][0],cols[2][0],cols[3][0]],["Riptide hits","Tide D wins","Wave D wins","Tsunami D wins"])+'</div>'+vaLadderHTML()+quoteHTML()+
     '<div class="note" style="margin:0 2px 4px">Tap a race: blank → D → R → blank. Left stripe = party holding the seat. ★ = redrawn since 2024.</div>';
   var heads=[["c0","Red Riptide","GOP holds or gains"],["c1","Blue Tide","Dems 218–229"],["c2","Blue Wave","Dems 230–239"],["c3","Blue Tsunami","Dems 240+"]];
-  heads.push(["cw","Also watching","Not on your chart"]);
+  heads.push(["cw","Also watching","From Todd and DDHQ"]);
   heads.forEach(function(hd,ci){if(ci===4)ci=-1;
     h+='<div class="colhead '+hd[0]+'"><div>'+hd[1]+'<br><span>'+hd[2]+'</span></div><small>'+(ci<0?"seat math":ci===0?cols[0][0]+" lost":cols[ci][0]+"/"+cols[ci][1]+" D")+'</small></div>';
     if(ci===0){h+='<div class="note" style="margin:0 2px 8px">Dashed tests: check when the GOP clears the bar.</div>';
@@ -484,9 +510,9 @@ function keysHTML(){
   var h='<div class="card"><div class="eyebrow">Keys that have hit</div><div class="verdict"><span style="color:var(--d)">'+b+' blue</span> <span class="vn">·</span> <span style="color:var(--r)">'+r+' red</span></div><div class="sub">Tap a key when it happens.</div></div><div class="card" style="padding:0">';
   KEYS.forEach(function(k,i){var p=k[0].replace(/(\d+)/g,function(x){var y=parseInt(x,10)-1;return String(y===0?12:y)});
     h+='<div class="key '+k[3]+(S.k[i]?" on":"")+'" data-k="'+i+'"><div class="box">'+(S.k[i]?"✓":"")+'</div><div class="t">'+p+' CT</div><div class="tx"><b>'+esc(k[1])+'</b>'+(k[2]?'<span>→ '+esc(k[2])+'</span>':'')+'</div></div>'});
-  h+='</div>'+quoteHTML()+'<div class="card"><b>Live results</b><div class="links"><a href="https://www.google.com/search?q=2026+election+results">Google (AP data)</a><a href="https://decisiondeskhq.com">Decision Desk HQ</a><a href="https://www.270towin.com">270toWin</a></div>'+
+  h+='</div>'+countingHTML()+quoteHTML()+'<div class="card"><b>Live results</b><div class="links"><a href="https://www.google.com/search?q=2026+election+results">Google (AP data)</a><a href="https://decisiondeskhq.com">Decision Desk HQ</a><a href="https://www.270towin.com">270toWin</a></div>'+
     '<div class="note">Benchmarks from your charts: DDHQ, Chuck Todd, Karl Rove (WSJ), Hans Nichols (Axios), Charlie Cook, Cook Political Report, 270toWin. Ranges are judgment calls, not modeled odds.</div>'+
-    '<button class="ghost" id="demo">Test the fireworks</button><button class="ghost" id="demo2">Test the tsunami</button><button class="ghost" id="demo3">Test the flyover</button><button class="ghost" id="reset">Clear all entries</button><div class="confirm" id="confirm">Clear everything? <button class="ghost" id="yes" style="margin:0;color:var(--rip)">Yes, clear</button><button class="ghost" id="no" style="margin:0">Cancel</button></div></div>';
+    '<button class="ghost" id="demo">Test the fireworks</button><button class="ghost" id="demo2">Test the tsunami</button><button class="ghost" id="demo3">Test the flyover</button><button class="ghost" id="demo4">Test the sound 🦅</button><button class="ghost" id="reset">Clear all entries</button><div class="confirm" id="confirm">Clear everything? <button class="ghost" id="yes" style="margin:0;color:var(--rip)">Yes, clear</button><button class="ghost" id="no" style="margin:0">Cancel</button></div></div>';
   return h;
 }
 
@@ -496,15 +522,35 @@ function openNote(k){closeNote();var t=NOTES[k]||"";var title=k;
   sh.innerHTML='<div class="grab"></div><div class="eyebrow" style="color:var(--gold);margin-bottom:6px">✱ Why it matters</div><h3>'+esc(title)+'</h3><p>'+esc(t)+'</p>';
   document.body.appendChild(bg);document.body.appendChild(sh)}
 function closeNote(){["sheet","sheetbg"].forEach(function(i){var x=document.getElementById(i);if(x)x.remove()})}
+function vaLadderHTML(){
+  var a=S.h["VA-02"],b=S.h["VA-01"],c=S.h["VA-05"],lab,cls,sub;
+  if(c==="D"){lab="Holy smokes: about 250";cls="v3";sub="VA-05 flipped. Tsunami territory."}
+  else if(b==="D"){lab="2018-style: about 235+";cls="v2";sub="VA-01 flipped. The classic wave test."}
+  else if(a==="D"){lab="Solid: 227 to 237";cls="v1";sub="VA-02 flipped. A normal Dem gain, maybe more."}
+  else if(a==="R"){lab="No wave so far";cls="v0";sub="Kiggans held VA-02. Dem majority odds drop below 50% (DDHQ)."}
+  else{lab="Waiting on Virginia";cls="vn";sub="Virginia counts fast. Results start after 6 CT."}
+  function cell(id,size,seat,v){return'<div style="flex:1;padding:8px;border-radius:10px;background:'+(v==="D"?"rgba(61,123,255,.25)":v==="R"?"rgba(255,77,94,.18)":"rgba(255,255,255,.05)")+'"><div class="eyebrow">'+size+'</div><b style="font:800 15px var(--hd)">'+id+'</b><div class="lbl">'+seat+'</div></div>'}
+  return'<div class="card"><div class="row1"><span class="eyebrow">Todd\'s Virginia ladder</span><span class="sub">How big is it?</span></div><div class="verdict '+cls+'" style="font-size:24px">'+lab+'</div><div class="sub">'+sub+'</div>'+
+   '<div style="display:flex;gap:6px;margin-top:10px">'+cell("VA-02","Small","Luria v Kiggans",a)+cell("VA-01","Medium","~235 seats",b)+cell("VA-05","Large","~250 seats",c)+'</div>'+
+   '<div class="note">Tap the VA seats below to set results. Seat estimates from Chuck Todd and DDHQ.</div></div>';
+}
+function countingHTML(){
+  var L=[["Florida","Fast and clean: the best early read of the night."],["Georgia","Metro Atlanta counts last, so early GOP leads are unreliable."],["Michigan","Detroit reports late; early numbers look redder than the result."],["Texas","Big Democratic metros report late."],["Arizona, Nevada, California","Heavy mail voting; days of counting."],["Maine and Alaska","Ranked-choice can take days to weeks."]];
+  return'<div class="card"><b>Early returns can mislead</b><div class="note" style="margin-top:4px">Judge margins against expectations and 2024, not who\'s ahead. A red state that won\'t get called is usually good news for Dems.</div>'+
+   L.map(function(x){return'<div style="margin-top:8px;font-size:13.5px"><b>'+x[0]+':</b> <span style="color:var(--mute)">'+x[1]+'</span></div>'}).join("")+'</div>';
+}
 // ---------- events ----------
 function after(fn){var prev=snap(),y=window.scrollY;fn();save();render();window.scrollTo(0,y);celebrate(prev,snap(),true)}
+document.addEventListener("click",function(){if(SOUND)actx()},true);
 document.addEventListener("click",function(e){
   if(e.target.closest("a"))return;
   var as=e.target.closest(".ast");if(as){e.stopPropagation();openNote(as.dataset.note);return}
   if(e.target.closest("#sheetbg,#sheet")){closeNote();return}
   if(e.target.closest("#quote")){QI=(QI+1)%QUOTES.length;var q=document.getElementById("quote");q.outerHTML=quoteHTML();return}
-  var t=e.target.closest("[data-s],[data-h],[data-t],[data-k],[data-cc],#reset,#yes,#no,#demo,#demo2,#demo3");if(!t||t.matches("input"))return;
+  var t=e.target.closest("[data-s],[data-h],[data-t],[data-k],[data-cc],#reset,#yes,#no,#demo,#demo2,#demo3,#demo4,#snd");if(!t||t.matches("input"))return;
+  if(t.id==="snd"){SOUND=!SOUND;try{localStorage.setItem("entrackerSound",SOUND?"1":"0")}catch(e){}if(SOUND){actx();eagle()}var y1=window.scrollY;render();window.scrollTo(0,y1);return}
   if(t.id==="demo3"){flyover();return}
+  if(t.id==="demo4"){if(!SOUND){SOUND=true;try{localStorage.setItem("entrackerSound","1")}catch(e){}render()}actx();eagle();setTimeout(fife,1700);return}
   if(t.id==="demo2"){tsunami("house");return}
   if(t.id==="demo"){fireworks("all","med");toast("That is what a big moment looks like","G");return}
   if(t.id==="reset"){document.getElementById("confirm").classList.add("show");return}
