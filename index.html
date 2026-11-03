@@ -326,11 +326,11 @@ function toast(msg,party){var t=document.getElementById("toasts"),el=document.cr
 var AC=null,SOUND=false;try{SOUND=localStorage.getItem("entrackerSound")==="1"}catch(e){}
 function actx(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}if(AC.state==="suspended")AC.resume();return AC}
 function eagle(){if(!SOUND)return;var a=actx();if(!a)return;var t=a.currentTime+.05;
-  for(var k=0;k<2;k++){var s0=t+k*.8,o=a.createOscillator(),g=a.createGain(),f=a.createBiquadFilter(),l=a.createOscillator(),lg=a.createGain();
-    o.type="sawtooth";f.type="bandpass";f.Q.value=5;f.frequency.value=2700;
+  for(var k=0;k<1;k++){var s0=t+k*.8,o=a.createOscillator(),g=a.createGain(),f=a.createBiquadFilter(),l=a.createOscillator(),lg=a.createGain();
+    o.type="triangle";f.type="lowpass";f.Q.value=1;f.frequency.value=3000;
     o.frequency.setValueAtTime(1600,s0);o.frequency.exponentialRampToValueAtTime(3400,s0+.12);o.frequency.exponentialRampToValueAtTime(2500,s0+.45);o.frequency.exponentialRampToValueAtTime(1400,s0+.7);
-    l.frequency.value=34;lg.gain.value=140;l.connect(lg);lg.connect(o.frequency);
-    g.gain.setValueAtTime(.0001,s0);g.gain.exponentialRampToValueAtTime(.45,s0+.04);g.gain.exponentialRampToValueAtTime(.25,s0+.45);g.gain.exponentialRampToValueAtTime(.0001,s0+.72);
+    l.frequency.value=22;lg.gain.value=60;l.connect(lg);lg.connect(o.frequency);
+    g.gain.setValueAtTime(.0001,s0);g.gain.exponentialRampToValueAtTime(.12,s0+.06);g.gain.exponentialRampToValueAtTime(.07,s0+.45);g.gain.exponentialRampToValueAtTime(.0001,s0+.72);
     o.connect(f);f.connect(g);g.connect(a.destination);o.start(s0);o.stop(s0+.75);l.start(s0);l.stop(s0+.75)}}
 function fife(){if(!SOUND)return;var a=actx();if(!a)return;
   var F={D4:293.66,E4:329.63,Fs4:369.99,G4:392,A4:440,B4:493.88,C5:523.25};
@@ -338,12 +338,12 @@ function fife(){if(!SOUND)return;var a=actx();if(!a)return;
          ["G4",1],["G4",1],["A4",1],["B4",1],["C5",1],["B4",1],["A4",1],["G4",1],["Fs4",1],["D4",1],["E4",1],["Fs4",1],["G4",2],["G4",2]];
   var t=a.currentTime+.08,u=.19;
   M.forEach(function(n){var o=a.createOscillator(),g=a.createGain(),v=a.createOscillator(),vg=a.createGain(),d=n[1]*u;
-    o.type="triangle";o.frequency.value=F[n[0]]*2;v.frequency.value=6;vg.gain.value=6;v.connect(vg);vg.connect(o.frequency);
-    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.28,t+.02);g.gain.setValueAtTime(.24,t+d*.7);g.gain.exponentialRampToValueAtTime(.0001,t+d*.95);
+    o.type="sine";o.frequency.value=F[n[0]]*2;v.frequency.value=5;vg.gain.value=4;v.connect(vg);vg.connect(o.frequency);
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.1,t+.03);g.gain.setValueAtTime(.08,t+d*.7);g.gain.exponentialRampToValueAtTime(.0001,t+d*.95);
     o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d);v.start(t);v.stop(t+d);
     /* snare tap on each beat */
     if(n[1]>=1){var b=a.createBuffer(1,a.sampleRate*.05,a.sampleRate),dd=b.getChannelData(0);for(var i=0;i<dd.length;i++)dd[i]=(Math.random()*2-1)*(1-i/dd.length);
-      var ns=a.createBufferSource(),ng=a.createGain();ns.buffer=b;ng.gain.value=.07;ns.connect(ng);ng.connect(a.destination);ns.start(t)}
+      var ns=a.createBufferSource(),ng=a.createGain();ns.buffer=b;ng.gain.value=.018;ns.connect(ng);ng.connect(a.destination);ns.start(t)}
     t+=d});}
 function soundBtn(){return'<button id="snd" style="border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);border-radius:20px;padding:5px 10px;font:700 12px Inter">'+(SOUND?"🔊 On":"🔇 Sound")+'</button>'}
 
