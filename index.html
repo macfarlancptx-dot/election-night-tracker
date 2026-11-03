@@ -347,9 +347,9 @@ function fifeTone(){if(!SOUND)return;var a=actx();if(!a)return;
     t+=d});}
 function pickVoice(){try{var vs=speechSynthesis.getVoices();var en=vs.filter(function(v){return/^en(-|_)US/i.test(v.lang)});return en.filter(function(v){return/Samantha|Alex|Google US|Aaron|Nicky/i.test(v.name)})[0]||en[0]||null}catch(e){return null}}
 function cheer(n){if(!SOUND)return;var ss=window.speechSynthesis;if(!ss){return}
-  try{ss.cancel();var v=pickVoice();for(var i=0;i<n;i++){var u=new SpeechSynthesisUtterance("U! S! A!");u.rate=1.1;u.pitch=1.25;u.volume=1;if(v)u.voice=v;ss.speak(u)}}catch(e){}}
+  try{ss.cancel();var v=pickVoice();for(var i=0;i<n;i++){var u=new SpeechSynthesisUtterance("Let's go, America!");u.rate=1.1;u.pitch=1.25;u.volume=1;if(v)u.voice=v;ss.speak(u)}}catch(e){}}
 function eagle(){cheer(1)}
-function fife(){cheer(3)}
+function fife(){cheer(1)}
 function soundBtn(){return'<button id="snd" style="border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);border-radius:20px;padding:5px 10px;font:700 12px Inter">'+(SOUND?"🔊 On":"🔇 Sound")+'</button>'}
 
 // ---------- change detection ----------
