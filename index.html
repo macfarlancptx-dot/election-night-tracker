@@ -278,7 +278,7 @@ function freshHTML(){
 }
 function howtoHTML(){var hide=false;try{hide=localStorage.getItem("entrackerHowto")==="1"}catch(e){}
   if(hide||TAB==="keys")return"";
-  return'<div class="card howto"><b>How to read this:</b> each race falls in a column. <b style="color:var(--rip)">Red Riptide</b> = GOP holding or gaining; <b style="color:var(--tide)">Blue Tide</b>, <b style="color:var(--wave)">Wave</b> and <b style="color:#8fb2ff">Tsunami</b> = bigger and bigger Dem gains. Tap a gold ✱ to see why a race matters. Early counts are shown faded and don\'t count until half the vote is in. <div><button class="ghost" id="howok" style="margin:8px 0 0;padding:6px 12px">Got it</button></div></div>'}
+  return'<div class="card howto"><b>How to read this:</b> races are sorted into flips, holds and still counting. A flip means the seat changed parties tonight. Tap a gold ✱ to see why a race matters. <div><button class="ghost" id="howok" style="margin:8px 0 0;padding:6px 12px">Got it</button></div></div>'}
 function esc(x){return String(x).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function buildDoc(){
   var json=JSON.stringify(S).replace(/</g,"\\u003c");
@@ -492,47 +492,54 @@ function distBar(counts,labels){var tot=counts.reduce(function(a,b){return a+b},
   counts.forEach(function(c,i){if(c)h+='<div class="c'+i+'" style="flex:'+c+'">'+c+'</div>'});
   if(!tot)h+='<div style="flex:1;color:var(--mute);font-weight:600">No margins entered yet</div>';
   return h+'</div><div class="legend">'+labels.map(function(l){return"<span>"+l+"</span>"}).join("")+'</div>'}
+var HIST={TX:"First Democratic Senate win in Texas since Lloyd Bentsen in 1988, and the first Democratic statewide win there since 1994.",KS:"First Democrat Kansas has elected to the Senate since 1932.",SC:"First Democratic Senate win in South Carolina since Fritz Hollings in 1998.",NC:"First Democratic Senate win in North Carolina since Kay Hagan in 2008.",IA:"First Democratic Senate win in Iowa since Tom Harkin in 2008.",MS:"First Democratic Senate win in Mississippi since John Stennis in 1982.",NE:"Nebraska's first independent senator since George Norris won in 1936.",ME:"First Democrat elected to the Senate from Maine since George Mitchell in 1988.",AK:"First Democratic Senate win in Alaska since Mark Begich in 2008.","NC-09":"Republicans had held this seat since 1963, and its congressman ran the House GOP campaign arm.","NC-11":"First Democratic win in this western North Carolina seat since 2010."};
+function senHistLine(net){if(net>=9)return"The biggest Democratic Senate gain since 1958.";if(net===8)return"Matches 2008 as the biggest Democratic Senate gain in a generation.";if(net>=6)return"The biggest Democratic Senate gain since 2008, when they picked up 8.";return""}
+function histCard(ids,title){var L=ids.filter(function(k){return HIST[k]});if(!L.length)return"";
+  return'<div class="card"><div class="eyebrow" style="color:var(--gold)">'+title+'</div>'+L.map(function(k){return'<div style="margin-top:8px;font-size:14px"><b>'+k+':</b> <span style="color:var(--mute)">'+esc(HIST[k])+'</span></div>'}).join("")+'</div>'}
+function senStatus(r){var st=S.s[r[0]]||{},c=st.call;if(!c)return"count";var demSide=(c==="D"||c==="I");if(demSide)return r[6]==="R"?"dflip":"dhold";return r[6]==="D"?"rflip":"rhold"}
+var SGROUPS=[["dflip","Democratic pickups","var(--d)"],["rflip","Republican pickups","var(--r)"],["dhold","Democratic holds","var(--d)"],["rhold","Republican holds","var(--r)"],["count","Still counting","var(--mute)"]];
+function tallyHTML(title,big,bigcls,sub,items){
+  return'<div class="card"><div class="eyebrow">'+title+'</div>'+(big?'<div class="verdict '+bigcls+'">'+big+'</div>':'')+(sub?'<div class="sub">'+sub+'</div>':'')+
+   '<div style="display:grid;grid-template-columns:repeat('+items.length+',1fr);gap:6px;margin-top:10px">'+items.map(function(x){return'<div style="padding:8px 6px;border-radius:10px;background:rgba(255,255,255,.05);text-align:center"><b style="font:800 22px var(--hd);color:'+x[2]+'">'+x[0]+'</b><div class="lbl" style="font-size:11px">'+x[1]+'</div></div>'}).join("")+'</div></div>'}
 function senateHTML(){
-  var z=senState();
-  var h=meterHTML(true)+'<div class="card"><div class="eyebrow">Senate is tracking toward</div><div class="verdict '+vcls(z.v)+popIf("s",z.v)+'">'+(z.v<0?(z.tot?"Too early to tell":"Waiting on results"):COLS[z.v])+'</div>'+
-    '<div class="sub">Middle of the '+z.tot+' races with at least half the vote counted or a call (needs 3+). Dems need net +4.</div>'+
-    '<div class="note">Called: <b style="color:var(--ink)">'+z.called+' of 15</b> · Net D change from these calls: <b style="color:'+(z.net>0?"var(--d)":z.net<0?"var(--r)":"var(--ink)")+'">'+(z.net>0?"+":"")+z.net+'</b>'+(z.osb?' <b style="color:var(--i)">+ Osborn (I) in NE</b>':'')+'</div></div>'+quoteHTML();
-  var groups={};SEN.forEach(function(r){(groups[r[2]]=groups[r[2]]||[]).push(r)});
-  Object.keys(groups).forEach(function(t){
-    h+='<div class="grouphead">Polls close '+ct(t)+' CT</div>';
-    groups[t].forEach(function(r){
-      var st=S.s[r[0]]||{},c=senCol(r),indep=r[0]==="NE",dl=indep?"I":"D",cls=st.call?(st.call==="R"?" isR":" isD"):"";
+  var g={};SEN.forEach(function(r){var s=senStatus(r);(g[s]=g[s]||[]).push(r)});
+  var cnt=function(k){return(g[k]||[]).length},net=cnt("dflip")-cnt("rflip");
+  var h=meterHTML(true)+tallyHTML("Tracked Senate races",(net>0?"Democrats +"+net:net<0?"Republicans +"+(-net):"No net change yet"),net>0?"v2":net<0?"v0":"vn",
+    (senHistLine(net)?senHistLine(net)+" ":"")+(cnt("dflip")?"Pickups: "+(g.dflip||[]).map(function(r){return r[0]==="NE"?"NE (Osborn, I)":r[0]}).join(", ")+".":"")+(cnt("count")?" Still counting: "+(g.count||[]).map(function(r){return r[0]}).join(", ")+".":""),
+    [[cnt("dflip"),"D pickups","var(--d)"],[cnt("dhold"),"D holds","var(--d)"],[cnt("rhold")+cnt("rflip"),"R wins","var(--r)"],[cnt("count"),"Counting","var(--ink)"]])+histCard((g.dflip||[]).map(function(r){return r[0]}),"Tonight in history")+quoteHTML();
+  SGROUPS.forEach(function(gr){var rows=g[gr[0]];if(!rows||!rows.length)return;
+    h+='<div class="grouphead" style="color:'+gr[2]+'">'+gr[1]+' · '+rows.length+'</div>';
+    rows.forEach(function(r){
+      var st=S.s[r[0]]||{},indep=r[0]==="NE",dl=indep?"I":"D",cls=st.call?(st.call==="R"?" isR":" isD"):"";
+      var lead=(!st.call&&st.lead&&st.m!==""&&st.m!=null)?'<div style="margin-top:6px;font-weight:700;color:'+(st.lead==="R"?"var(--r)":st.lead==="I"?"var(--i)":"var(--d)")+'">'+(st.lead==="R"?"R":st.lead)+' leads by '+esc(st.m)+(st.pct?' · '+esc(st.pct)+'% in':'')+'</div>':'';
       h+='<div class="card race'+cls+'"><div class="row1"><span class="st">'+r[0]+'<span class="ast" data-note="'+r[0]+'">✱</span></span><span class="mu">'+esc(r[1])+'</span>'+
-        (st.call?'<span class="called" style="background:var(--'+(st.call==="R"?"r":st.call==="I"?"i":"d")+')">'+st.call+' WINS</span>':'<span class="rcp">'+(r[3].indexOf("polls")===0?"Polls "+r[3].slice(6):"RCP "+r[3])+'</span>')+'</div>'+
-        '<div style="display:flex;gap:10px;align-items:center;margin-top:6px">'+rlink(STNAME[r[0]]+" Senate election results 2026")+(st.pct?'<span class="auto" style="padding:0">'+esc(st.pct)+'% in</span>':'')+(st.m&&st.t?'<span class="auto" style="padding:0">as of '+ctTime(st.t)+'</span>':'')+(st.by==="auto"?'<span class="auto" style="padding:0">· auto</span>':'')+'</div>'+
-        (r[4]?'<div class="bench">'+r[4].map(function(l,i){var on=c===i,cnt=senCounts(r);return'<div class="c'+i+(on?(cnt?" hit":" soft"):"")+'">'+l+'</div>'}).join("")+'</div>'+(c>=0&&!senCounts(r)?'<div class="note" style="margin:-4px 0 8px">Early count: shown faded, not counted until 50% is in or the race is called.</div>':''):'<div class="note" style="margin:8px 0 10px">Not on your chart, so there are no column benchmarks. Track the margin and the call. Most of Alaska closes at 11:00 CT.</div>')+
+        (st.call?'<span class="called" style="background:var(--'+(st.call==="R"?"r":st.call==="I"?"i":"d")+')">'+st.call+(senStatus(r).indexOf("flip")>0?" FLIP":" WINS")+'</span>':'<span class="rcp">Polls close '+ct(r[2])+' CT</span>')+'</div>'+lead+(senStatus(r)==="dflip"&&HIST[r[0]]?'<div class="note" style="margin-top:6px;color:var(--gold)">'+esc(HIST[r[0]])+'</div>':'')+
+        '<div style="display:flex;gap:10px;align-items:center;margin-top:6px">'+rlink(STNAME[r[0]]+" Senate election results 2026")+(st.t?'<span class="auto" style="padding:0">as of '+ctTime(st.t)+'</span>':'')+'</div>'+
         '<div class="ctrl"><div class="seg"><button data-s="'+r[0]+'" data-f="lead" data-v="R" class="'+(st.lead==="R"?"onR":"")+'">R</button><button data-s="'+r[0]+'" data-f="lead" data-v="D" class="'+(st.lead==="D"?(indep?"onI":"onD"):"")+'">'+dl+'</button></div>'+
         '<input class="num" inputmode="decimal" placeholder="+pts" data-s="'+r[0]+'" data-f="m" value="'+esc(st.m==null?"":st.m)+'">'+
         '<input class="num" inputmode="numeric" placeholder="% in" data-s="'+r[0]+'" data-f="pct" value="'+esc(st.pct==null?"":st.pct)+'" style="width:58px">'+
         '<span style="display:flex;gap:6px;align-items:center;margin-left:auto"><span class="lbl">Call</span><div class="seg"><button data-s="'+r[0]+'" data-f="call" data-v="R" class="'+(st.call==="R"?"onR":"")+'">R</button><button data-s="'+r[0]+'" data-f="call" data-v="'+dl+'" class="'+(st.call===dl?(indep?"onI":"onD"):"")+'">'+dl+'</button></div></span></div></div>';
     });
   });
-  return h+'<div class="note">Pick the leader and enter the margin in points; the glowing cell is the column it lands in, per the Oct. 30 benchmarks. FL panhandle closes 7:00 CT; KS far west, MI upper peninsula and El Paso 8:00 CT. Maine ranked-choice could take days.</div>';
+  return h+'<div class="note">Maine uses ranked-choice voting if no one tops 50%, which can take days. Alaska\'s ranked-choice count starts Nov. 18.</div>';
 }
+function houStatus(r){var v=S.h[r[0]];if(!v)return"count";return v==="D"?(r[1]==="R"?"dflip":"dhold"):(r[1]==="D"?"rflip":"rhold")}
 function houseHTML(){
-  var z=houseState(),cols=z.cols;
-  var pj=n(S.c.hproj),pv=pj===null?null:(pj>=240?3:pj>=230?2:pj>=218?1:0);
-  var h=meterHTML(false)+(pv!==null?'':'<div class="card"'+(pv===null&&z.reds?' style="border-color:rgba(255,77,94,.6)"':'')+'><div class="eyebrow">'+(pv===null?'House is tracking toward':'House result')+'</div><div class="verdict '+(pv===null?vcls(z.v):'v'+pv)+popIf("h",pv===null?z.v:pv)+'">'+(pv===null?z.label:COLS[pv])+'</div>'+
-    '<div class="sub">'+(pv===null?'Highest column where Dems have won at least half the decided races (needs 3+ decided in a column).'+(z.reds?' <b style="color:var(--rip)">'+z.reds+' red signal'+(z.reds>1?"s":"")+'.</b>':''):'NBC News projects Democrats will win at least '+pj+' seats.')+'</div></div>')+(pv===null?vaLadderHTML():'')+quoteHTML()+
-    '<div class="note rohide" style="margin:0 2px 4px">Tap a race: blank → D → R → blank. Left stripe = party holding the seat. ★ = redrawn since 2024.</div>';
-  var heads=[["c0","Red Riptide","GOP holds or gains"],["c1","Blue Tide","Dems 218–229"],["c2","Blue Wave","Dems 230–239"],["c3","Blue Tsunami","Dems 240+"]];
-  heads.push(["cw","Also watching","From Todd and DDHQ"]);
-  heads.forEach(function(hd,ci){if(ci===4)ci=-1;
-    h+='<div class="colhead '+hd[0]+'"><div>'+hd[1]+'<br><span>'+hd[2]+'</span></div><small>'+(ci<0?"seat math":ci===0?cols[0][0]+" lost":cols[ci][0]+"/"+cols[ci][1]+" D")+'</small></div>';
-    if(ci===0){h+='<div class="note" style="margin:0 2px 8px">Dashed tests: check when the GOP clears the bar.</div>';
-      TESTS.forEach(function(t){h+='<div class="test'+(S.t[t[0]]?" on":"")+'" data-t="'+t[0]+'"><div class="box">'+(S.t[t[0]]?"✓":"")+'</div><div><b style="font-size:14px">'+esc(t[2])+'</b><div class="lbl">'+ct(t[1])+' CT</div></div></div>'})}
-    var rows=HOU.filter(function(r){return r[3]===ci});
-    h+='<div class="house">';
+  var pj=n(S.c.hproj),g={};HOU.forEach(function(r){var s=houStatus(r);(g[s]=g[s]||[]).push(r)});
+  var cnt=function(k){return(g[k]||[]).length};
+  var big=pj!==null?(pj>=240?"Blue Tsunami":"Democrats at "+pj+"+"):null;
+  var h=meterHTML(false)+tallyHTML("Tracked House races",big,pj!==null&&pj>=240?"v3":"v2",pj!==null?"NBC News projects Democrats will win at least "+pj+" seats"+(pj>=255?", the most House Democrats since 2008":"")+". They went in holding 215, so that is a gain of about "+(pj-215)+(pj-215>=42?", topping 2018's 41 seats, which was the biggest Democratic gain since Watergate-era 1974 (49).":", on the scale of 2018's 41 seats, the biggest Democratic gain since Watergate-era 1974 (49)."):"",
+    [[cnt("dflip"),"D flips","var(--d)"],[cnt("dhold"),"D holds","var(--d)"],[cnt("rhold")+cnt("rflip"),"R wins","var(--r)"],[cnt("count"),"Counting","var(--ink)"]])+histCard((g.dflip||[]).map(function(r){return r[0]}),"Tonight in history")+quoteHTML()+
+    '<div class="note rohide" style="margin:0 2px 4px">Tap a race: blank → D → R → blank. Left stripe = party holding the seat before tonight. ★ = redrawn since 2024.</div>';
+  var HG=[["dflip","Democratic flips","c3"],["rflip","Republican flips","c0"],["dhold","Democratic holds","c1"],["rhold","Republican holds","c0"],["count","Still counting","cw"]];
+  HG.forEach(function(gr){var rows=g[gr[0]];if(!rows||!rows.length)return;
+    if(gr[0]==="count")rows=rows.slice().sort(function(a,b){return parseFloat(a[4])-parseFloat(b[4])});
+    h+='<div class="colhead '+gr[2]+'"><div>'+gr[1]+'</div><small>'+rows.length+'</small></div><div class="house">';
     rows.forEach(function(r){var v=S.h[r[0]]||"",flip=v&&v!==r[1];
-      h+='<div class="hr h'+r[1]+(v?" w"+v:"")+(flip?" flip":"")+'" data-h="'+r[0]+'"><div style="min-width:0"><div class="id">'+r[0]+(r[2]?' <span style="color:var(--gold)">★</span>':'')+'<span class="ast" data-note="'+r[0]+'">✱</span></div><div class="nm">'+esc(r[5])+' · '+ct(r[4])+' CT</div>'+rlink(AB[r[0].slice(0,2)]+" "+r[0].slice(3).replace(/^0/,"")+" congressional district results 2026")+'</div><div class="res '+v+'">'+(v||"")+'</div></div>'});
+      h+='<div class="hr h'+r[1]+(v?" w"+v:"")+(flip?" flip":"")+'" data-h="'+r[0]+'"><div style="min-width:0"><div class="id">'+r[0]+(r[2]?' <span style="color:var(--gold)">★</span>':'')+'<span class="ast" data-note="'+r[0]+'">✱</span></div><div class="nm">'+esc(r[5])+(v?'':' · '+ct(r[4])+' CT')+'</div>'+rlink(AB[r[0].slice(0,2)]+" "+r[0].slice(3).replace(/^0/,"")+" congressional district results 2026")+'</div><div class="res '+v+'">'+(v||"")+'</div></div>'});
     h+='</div>';
   });
-  return h+'<div class="note">Rove: read results against 2024. An incumbent behind his 2024 pace county by county will not be saved by late votes (a rougher guide in ★ seats). Other California Prop. 50 districts may take days or weeks to count.</div>';
+  return h+'<div class="note">These are the competitive and signal seats we tracked, not all 435. California and Arizona may take days to finish counting.</div>';
 }
 function keysHTML(){
   var b=0,r=0;KEYS.forEach(function(k,i){if(S.k[i]){if(k[3]==="blue")b++;if(k[3]==="red")r++}});
