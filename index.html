@@ -180,7 +180,7 @@ button.ghost{border:1px solid var(--line);background:rgba(255,255,255,.05);color
 <canvas id="fx"></canvas>
 <div id="toasts"></div>
 <div id="app"></div>
-<script id="state" type="application/json">{"updated":1793767042602,"s":{"GA":{"lead":"D","m":"18.0","pct":"93","call":"D","by":"auto","t":1793766992029},"FL":{"lead":"R","m":"0.9","pct":"81","call":"R","by":"auto","t":1793755353051},"OH":{"lead":"D","m":"2.2","pct":"88","call":"D","by":"auto","t":1793766992029},"SC":{"lead":"D","m":"4.2","pct":"86","call":"D","by":"auto","t":1793762688103},"NC":{"lead":"D","m":"","pct":"","call":"D","by":"auto","t":1793758983339},"NH":{"lead":"D","m":"","pct":"","call":"D","by":"auto","t":1793758983339},"TX":{"lead":"D","m":"20.3","pct":"60","by":"auto","t":1793766992029,"call":"D"},"MI":{"lead":"D","m":"2.4","pct":"36","by":"auto","t":1793766992029,"call":""},"NE":{"lead":"I","m":"2.9","pct":"49","by":"auto","t":1793766992029,"call":""},"KS":{"lead":"D","m":"7.5","pct":"","call":"D","by":"auto","t":1793765448094},"IA":{"lead":"D","m":"4.7","pct":"91","by":"auto","t":1793766992029,"call":"D"},"ME":{"lead":"R","m":"0.1","pct":"46","by":"auto","t":1793766992029,"call":""},"MN":{"lead":"R","m":"5.7","pct":"38","by":"auto","t":1793766992029,"call":""}},"h":{"VA-02":"D","VA-07":"D","FL-14":"D","FL-25":"D","FL-22":"D","NC-11":"D","KY-06":"D","PA-08":"D","OH-01":"D","VA-01":"D","CO-08":"D","IA-03":"D","AZ-06":"D"},"hu":{},"t":{},"k":{"2":true,"8":true,"6":true,"7":true,"11":true},"c":{"sd":"51","sr":"39","hd":"163","hr":"96","houseCall":"D","senCall":"D","hproj":"255"},"auto":{"at":"10:40 PM CT","note":"Dems win Congress; House projected 255+ (Tsunami)"}}</script>
+<script id="state" type="application/json">{"updated":1793768192840,"s":{"GA":{"lead":"D","m":"18.0","pct":"93","call":"D","by":"auto","t":1793766992029},"FL":{"lead":"R","m":"0.9","pct":"81","call":"R","by":"auto","t":1793755353051},"OH":{"lead":"D","m":"2.2","pct":"88","call":"D","by":"auto","t":1793766992029},"SC":{"lead":"D","m":"4.2","pct":"86","call":"D","by":"auto","t":1793762688103},"NC":{"lead":"D","m":"","pct":"","call":"D","by":"auto","t":1793758983339},"NH":{"lead":"D","m":"14","pct":"78","call":"D","by":"auto","t":1793768192840},"TX":{"lead":"D","m":"20","pct":"69","by":"auto","t":1793768192840,"call":"D"},"MI":{"lead":"D","m":"1.7","pct":"43","by":"auto","t":1793768192840,"call":""},"NE":{"lead":"I","m":"1.6","pct":"53","by":"auto","t":1793768192840,"call":""},"KS":{"lead":"D","m":"7","pct":"92","call":"D","by":"auto","t":1793768192840},"IA":{"lead":"D","m":"5","pct":"92","by":"auto","t":1793768192840,"call":"D"},"ME":{"lead":"D","m":"3.1","pct":"59","by":"auto","t":1793768192840,"call":""},"MN":{"lead":"R","m":"5.4","pct":"44","by":"auto","t":1793768192840,"call":""}},"h":{"VA-02":"D","VA-07":"D","FL-14":"D","FL-25":"D","FL-22":"D","NC-11":"D","KY-06":"D","PA-08":"D","OH-01":"D","VA-01":"D","CO-08":"D","IA-03":"D","AZ-06":"D","PA-07":"D","PA-10":"D","NJ-07":"D","IA-01":"D","NE-02":"D","NC-09":"D","NC-01":"D"},"hu":{},"t":{},"k":{"2":true,"8":true,"6":true,"7":true,"11":true},"c":{"sd":"51","sr":"40","hd":"185","hr":"100","houseCall":"D","senCall":"D","hproj":"255"},"auto":{"at":"10:56 PM CT","note":"Jackson takes lead in Maine; 7 more House flips called"}}</script>
 <script id="app-script">
 (function(){
 var COLS=["Red Riptide","Blue Tide","Blue Wave","Blue Tsunami"];
@@ -450,13 +450,13 @@ function timelineHTML(){
 
 // ---------- render ----------
 var TAB="senate",QI=Math.floor(Math.random()*QUOTES.length),lastV={};
-function readHash(){var h=(location.hash||"").replace("#","");TAB=["senate","house","keys"].indexOf(h)>=0?h:"senate"}
+function readHash(){var h=(location.hash||"").replace("#","");TAB=["senate","house"].indexOf(h)>=0?h:"senate"}
 function rlink(q){return'<a class="rlink" href="https://www.google.com/search?q='+encodeURIComponent(q)+'">Live results ↗</a>'}
 function render(){
   var html='<header><div class="top"><h1><span>Election Night</span></h1><div style="display:flex;gap:8px;align-items:center">'+soundBtn()+'<div class="live"><i></i>LIVE</div></div></div>'+
     '<div id="tlwrap">'+timelineHTML()+'</div>'+
     '<div class="auto" id="fresh">'+freshHTML()+'</div>'+(PUBLIC?'<div class="auto" style="color:var(--ink);font-weight:600">Live board · updated by Erika · refreshes on its own</div>':'')+
-    '<nav>'+["senate","house","keys"].map(function(t){return'<a href="#'+t+'" class="'+(TAB===t?"on":"")+'">'+(t==="keys"?"Keys":t[0].toUpperCase()+t.slice(1))+'</a>'}).join("")+'</nav></header><main>'+bannersHTML()+howtoHTML();
+    '<nav>'+["senate","house"].map(function(t){return'<a href="#'+t+'" class="'+(TAB===t?"on":"")+'">'+(t==="keys"?"Keys":t[0].toUpperCase()+t.slice(1))+'</a>'}).join("")+'</nav></header><main>'+bannersHTML()+howtoHTML();
   if(TAB==="senate")html+=senateHTML();else if(TAB==="house")html+=houseHTML();else html+=keysHTML();
   html+='</main>';
   document.getElementById("app").innerHTML=html;
