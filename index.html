@@ -402,14 +402,15 @@ function celebrate(prev,cur,quiet){
     if(quiet||flip||hNew.length<=2){toast(k+" "+(p==="D"?"Democrat":"Republican")+(flip?" · FLIP":" · hold"),p);if(flip)setTimeout(function(){fireworks(p,"small");if(p==="D"&&i===0)eagle()},300+i*600)}});
   if(hNew.length>4)toast((hNew.length-4)+" more House results","G");
   // verdict shifts
-  if(cur.sv!==prev.sv&&cur.sv>=0){toast("Senate now tracking "+COLS[cur.sv],cur.sv===0?"R":"D");if(cur.sv>prev.sv&&cur.sv>=2)med=true}
-  if(cur.hv!==prev.hv&&cur.hv>=0){toast("House now tracking "+COLS[cur.hv],cur.hv===0?"R":"D");if(cur.hv>prev.hv&&cur.hv>=2)med=true}
   if(med&&!big)setTimeout(function(){fireworks("D","med");fife()},400);
   if(big)bigShow(big);
   var tw=null;
   if(cur.tsH&&cur.tsS&&!(prev.tsH&&prev.tsS))tw="both";else if(cur.tsH&&!prev.tsH)tw="house";else if(cur.tsS&&!prev.tsS)tw="senate";
   if(tw)setTimeout(function(){tsunami(tw)},big?5200:600);
 }
+function replayShow(){var s=snap(),C=s.ctl,big=C.senD&&C.houseD?"both":C.houseD?"house":C.senD?"senate":null;
+  if(big){bigShow(big);fireworks("D","med")}
+  var tw=s.tsH&&s.tsS?"both":s.tsH?"house":s.tsS?"senate":null;if(tw)setTimeout(function(){tsunami(tw)},big?(big==="both"?9500:5200):600)}
 function tsunami(which){
   var old=document.getElementById("tsu");if(old)old.remove();var ov=document.getElementById("ov");if(ov)ov.remove();
   var sub={house:"House Democrats projected at 240+ seats",senate:"Senate Democrats net +7 or more",both:"240+ House seats and a +7 Senate"}[which];
@@ -585,7 +586,7 @@ function govHTML(){var h='<div class="card"><div class="eyebrow" style="color:va
 function takeHTML(){
   var h='<div class="card"><div class="eyebrow">What voters told us</div><div class="verdict v2" style="font-size:26px">A vote for a check on power</div><div class="sub">Key findings from the NBC News Exit Poll and other Election Day voter surveys.</div></div>';
   TAKE.forEach(function(t){h+='<div class="card"><div class="eyebrow" style="color:var(--gold)">'+esc(t[0])+'</div>'+(t[1]?'<div style="font:800 34px var(--hd);color:var(--d);margin:4px 0">'+esc(t[1])+'</div>':'')+'<div style="font-size:14.5px;color:var(--ink)">'+esc(t[2])+'</div></div>'});
-  h+=govHTML()+demoHTML()+gerryHTML()+quoteHTML()+'<div class="note">Exit polls are surveys, early figures are preliminary, and they are adjusted as votes are counted. Sources: NBC News Exit Poll (with the network consortium), Tufts CIRCLE youth analysis, AP VoteCast, the ABC News/SSRS voter poll, NBC News governor coverage, CNBC and Fox News pre-election polls, and NBC, Washington Post, The Hill and Ballotpedia reporting on redistricting.</div>';
+  h+=govHTML()+demoHTML()+gerryHTML()+quoteHTML()+'<button class="ghost" id="replay">Replay tonight\'s celebration 🎆</button><div class="note">Exit polls are surveys, early figures are preliminary, and they are adjusted as votes are counted. Sources: NBC News Exit Poll (with the network consortium), Tufts CIRCLE youth analysis, AP VoteCast, the ABC News/SSRS voter poll, NBC News governor coverage, CNBC and Fox News pre-election polls, and NBC, Washington Post, The Hill and Ballotpedia reporting on redistricting.</div>';
   return h}
 function keysHTML(){
   var b=0,r=0;KEYS.forEach(function(k,i){if(S.k[i]){if(k[3]==="blue")b++;if(k[3]==="red")r++}});
@@ -630,9 +631,10 @@ document.addEventListener("click",function(e){
   var as=e.target.closest(".ast");if(as){e.stopPropagation();openNote(as.dataset.note);return}
   if(e.target.closest("#sheetbg,#sheet")){closeNote();return}
   if(e.target.closest("#quote")){QI=(QI+1)%QUOTES.length;var q=document.getElementById("quote");q.outerHTML=quoteHTML();return}
-  var t=e.target.closest("[data-s],[data-h],[data-t],[data-k],[data-cc],#reset,#yes,#no,#demo,#demo2,#demo3,#demo4,#snd");if(!t||t.matches("input"))return;
+  var t=e.target.closest("[data-s],[data-h],[data-t],[data-k],[data-cc],#reset,#yes,#no,#demo,#demo2,#demo3,#demo4,#replay,#snd");if(!t||t.matches("input"))return;
   if(t.id==="snd"){SOUND=!SOUND;try{localStorage.setItem("entrackerSound",SOUND?"1":"0")}catch(e){}if(SOUND){actx();eagle()}var y1=window.scrollY;render();window.scrollTo(0,y1);return}
   if(t.id==="demo3"){flyover();return}
+  if(t.id==="replay"){replayShow();return}
   if(t.id==="demo4"){if(!SOUND){SOUND=true;try{localStorage.setItem("entrackerSound","1")}catch(e){}render()}actx();eagle();setTimeout(fife,1700);return}
   if(t.id==="demo2"){tsunami("house");return}
   if(t.id==="demo"){fireworks("all","med");toast("That is what a big moment looks like","G");return}
@@ -680,7 +682,7 @@ function pollRemote(){
 readHash();render();
 setTimeout(pollRemote,1500);setInterval(pollRemote,60000);
 var prevSnap=getSnap(),curSnap=snap();
-if(prevSnap)setTimeout(function(){celebrate(prevSnap,curSnap,false)},700);
+if(prevSnap)setTimeout(function(){celebrate(prevSnap,curSnap,false)},700);else setTimeout(replayShow,900);
 storeSnap();
 try{var sy=sessionStorage.getItem("entrackerScroll");if(sy){sessionStorage.removeItem("entrackerScroll");setTimeout(function(){window.scrollTo(0,parseFloat(sy))},60)}}catch(e){}
 })();
