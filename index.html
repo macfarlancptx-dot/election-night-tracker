@@ -180,7 +180,7 @@ button.ghost{border:1px solid var(--line);background:rgba(255,255,255,.05);color
 <canvas id="fx"></canvas>
 <div id="toasts"></div>
 <div id="app"></div>
-<script id="state" type="application/json">{"updated":0,"s":{},"h":{},"hu":{},"t":{},"k":{},"c":{},"auto":{}}</script>
+<script id="state" type="application/json">{"updated":1793767042602,"s":{"GA":{"lead":"D","m":"18.0","pct":"93","call":"D","by":"auto","t":1793766992029},"FL":{"lead":"R","m":"0.9","pct":"81","call":"R","by":"auto","t":1793755353051},"OH":{"lead":"D","m":"2.2","pct":"88","call":"D","by":"auto","t":1793766992029},"SC":{"lead":"D","m":"4.2","pct":"86","call":"D","by":"auto","t":1793762688103},"NC":{"lead":"D","m":"","pct":"","call":"D","by":"auto","t":1793758983339},"NH":{"lead":"D","m":"","pct":"","call":"D","by":"auto","t":1793758983339},"TX":{"lead":"D","m":"20.3","pct":"60","by":"auto","t":1793766992029,"call":"D"},"MI":{"lead":"D","m":"2.4","pct":"36","by":"auto","t":1793766992029,"call":""},"NE":{"lead":"I","m":"2.9","pct":"49","by":"auto","t":1793766992029,"call":""},"KS":{"lead":"D","m":"7.5","pct":"","call":"D","by":"auto","t":1793765448094},"IA":{"lead":"D","m":"4.7","pct":"91","by":"auto","t":1793766992029,"call":"D"},"ME":{"lead":"R","m":"0.1","pct":"46","by":"auto","t":1793766992029,"call":""},"MN":{"lead":"R","m":"5.7","pct":"38","by":"auto","t":1793766992029,"call":""}},"h":{"VA-02":"D","VA-07":"D","FL-14":"D","FL-25":"D","FL-22":"D","NC-11":"D","KY-06":"D","PA-08":"D","OH-01":"D","VA-01":"D","CO-08":"D","IA-03":"D","AZ-06":"D"},"hu":{},"t":{},"k":{"2":true,"8":true,"6":true,"7":true,"11":true},"c":{"sd":"51","sr":"39","hd":"163","hr":"96","houseCall":"D","senCall":"D","hproj":"255"},"auto":{"at":"10:40 PM CT","note":"Dems win Congress; House projected 255+ (Tsunami)"}}</script>
 <script id="app-script">
 (function(){
 var COLS=["Red Riptide","Blue Tide","Blue Wave","Blue Tsunami"];
@@ -374,7 +374,7 @@ function soundBtn(){return'<button id="snd" style="border:1px solid var(--line);
 // ---------- change detection ----------
 function snap(){var sc={},hc={};SEN.forEach(function(r){var c=(S.s[r[0]]||{}).call;if(c)sc[r[0]]=c});HOU.forEach(function(r){if(S.h[r[0]])hc[r[0]]=S.h[r[0]]});
   var ss=senState(),hs=houseState(),sd=n(S.c.sd),hd=n(S.c.hd);
-  return{sc:sc,hc:hc,sv:ss.v,hv:hs.v,ctl:control(),tsS:(sd!==null&&sd>=54)||(ss.v===3&&ss.tot>=3),tsH:(hd!==null&&hd>=240)||(hs.v===3&&hs.cols[3][1]>=3)}}
+  return{sc:sc,hc:hc,sv:ss.v,hv:hs.v,ctl:control(),tsS:(sd!==null&&sd>=54)||(ss.v===3&&ss.tot>=3),tsH:(hd!==null&&hd>=240)||(n(S.c.hproj)!==null&&n(S.c.hproj)>=240)||(hs.v===3&&hs.cols[3][1]>=3)}}
 function getSnap(){try{return JSON.parse(localStorage.getItem("entrackerSnap")||"null")}catch(e){return null}}
 function storeSnap(){try{localStorage.setItem("entrackerSnap",JSON.stringify(snap()))}catch(e){}}
 function celebrate(prev,cur,quiet){
@@ -408,7 +408,7 @@ function celebrate(prev,cur,quiet){
 }
 function tsunami(which){
   var old=document.getElementById("tsu");if(old)old.remove();var ov=document.getElementById("ov");if(ov)ov.remove();
-  var sub={house:"House Democrats reach 240+ seats",senate:"Senate Democrats net +7 or more",both:"Both chambers, 240+ House and +7 Senate"}[which];
+  var sub={house:"House Democrats projected at 240+ seats",senate:"Senate Democrats net +7 or more",both:"240+ House seats and a +7 Senate"}[which];
   var el=document.createElement("div");el.id="tsu";
   var bubs="";for(var i=0;i<22;i++){var sz=6+Math.random()*18;bubs+='<div class="bub" style="left:'+(Math.random()*100)+'%;width:'+sz+'px;height:'+sz+'px;animation-duration:'+(3+Math.random()*4)+'s;animation-delay:'+(.8+Math.random()*3)+'s"></div>'}
   el.innerHTML='<div class="water"><div class="wv w1"></div><div class="wv w2"></div><div class="wv w3"></div>'+bubs+'</div><div class="txt"><div class="eyebrow" style="color:#cfe0ff;margin-bottom:10px">Confirmed</div><h2>BLUE<br>TSUNAMI</h2><p>'+sub+'</p><button>Ride it out</button></div>';
@@ -475,7 +475,7 @@ function meterHTML(isS){
   return'<div class="card"><div class="row1"><span class="eyebrow">'+(isS?"Senate":"House")+' seats called</span><span class="sub">'+need+' for control'+(isS?" (R holds at 50)":"")+'</span></div>'+
     '<div class="meter"><div class="fd" style="width:'+dw+'%"></div><div class="fr" style="width:'+rw+'%"></div><div class="mk" style="left:calc('+(need/total*100)+'% - 1px)"></div>'+
     '<div class="lab" style="left:0">'+(d===null?"":d)+'</div><div class="lab" style="right:0">'+(r===null?"":r)+'</div></div>'+
-    '<div class="mlab"><span>Democrats</span><b>▲ '+need+'</b><span>Republicans</span></div>'+
+    '<div class="mlab"><span>Democrats</span><b>▲ '+need+'</b><span>Republicans</span></div>'+(!isS&&n(c.hproj)!==null?'<div class="note" style="color:var(--ink);font-weight:600">Projected: Democrats at least '+n(c.hproj)+' seats (NBC News Decision Desk)</div>':'')+
     '<div class="ctlrow"><span class="lbl" style="color:var(--d);font-weight:800">D</span><input class="num" inputmode="numeric" placeholder="—" data-c="'+(isS?"sd":"hd")+'" value="'+esc(d===null?"":d)+'">'+
     '<span class="lbl" style="color:var(--r);font-weight:800">R</span><input class="num" inputmode="numeric" placeholder="—" data-c="'+(isS?"sr":"hr")+'" value="'+esc(r===null?"":r)+'">'+
     '<span class="lbl" style="margin-left:auto">AP calls control</span><div class="seg"><button data-cc="'+cf+'" data-v="D" class="'+(c[cf]==="D"?"onD":"")+'">D</button><button data-cc="'+cf+'" data-v="R" class="'+(c[cf]==="R"?"onR":"")+'">R</button></div></div>'+
