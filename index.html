@@ -458,7 +458,7 @@ function readHash(){var h=(location.hash||"").replace("#","");TAB=["senate","hou
 function rlink(q){return'<a class="rlink" href="https://www.google.com/search?q='+encodeURIComponent(q)+'">Live results ↗</a>'}
 function render(){
   var html='<header><div class="top"><h1><span>Election Night</span></h1><div style="display:flex;gap:8px;align-items:center">'+soundBtn()+'<div class="live"><i></i>LIVE</div></div></div>'+
-    '<div id="tlwrap">'+timelineHTML()+'</div>'+
+    '<div id="tlwrap"></div>'+
     '<div class="auto" id="fresh">'+freshHTML()+'</div>'+(PUBLIC?'<div class="auto" style="color:var(--ink);font-weight:600">Live board · updated by Erika · refreshes on its own</div>':'')+
     '<nav>'+["senate","house"].map(function(t){return'<a href="#'+t+'" class="'+(TAB===t?"on":"")+'">'+(t==="keys"?"Keys":t[0].toUpperCase()+t.slice(1))+'</a>'}).join("")+'</nav></header><main>'+bannersHTML()+howtoHTML();
   if(TAB==="senate")html+=senateHTML();else if(TAB==="house")html+=houseHTML();else html+=keysHTML();
@@ -496,6 +496,14 @@ var HIST={TX:"First Democratic Senate win in Texas since Lloyd Bentsen in 1988, 
 function senHistLine(net){if(net>=9)return"The biggest Democratic Senate gain since 1958.";if(net===8)return"Matches 2008 as the biggest Democratic Senate gain in a generation.";if(net>=6)return"The biggest Democratic Senate gain since 2008, when they picked up 8.";return""}
 function histCard(ids,title){var L=ids.filter(function(k){return HIST[k]});if(!L.length)return"";
   return'<div class="card"><div class="eyebrow" style="color:var(--gold)">'+title+'</div>'+L.map(function(k){return'<div style="margin-top:8px;font-size:14px"><b>'+k+':</b> <span style="color:var(--mute)">'+esc(HIST[k])+'</span></div>'}).join("")+'</div>'}
+function stillOutHTML(isS){
+  var out=[];
+  if(isS){SEN.forEach(function(r){var st=S.s[r[0]]||{};if(st.call)return;var who=r[0]==="NE"?{R:"Ricketts",I:"Osborn"}:null;
+      var lead=st.lead&&st.m?(st.lead==="R"?"R":st.lead)+" +"+st.m+(st.pct?" ("+st.pct+"% in)":""):"no results yet";out.push([STNAME[r[0]],lead])})}
+  else{["CA-22","CA-48","AZ-01","AZ-06","NY-17","MI-07","ME-02","VA-05","FL-27"].forEach(function(id){if(!S.h[id])out.push([id,""])})}
+  if(!out.length)return"";
+  return'<div class="card"><div class="eyebrow">What\'s still out</div>'+(isS?out.map(function(x){return'<div style="display:flex;justify-content:space-between;margin-top:8px;font-size:14px"><b>'+esc(x[0])+'</b><span style="color:var(--mute)">'+esc(x[1])+'</span></div>'}).join(""):'<div style="margin-top:8px;font-size:14px"><b>'+out.map(function(x){return x[0]}).join(", ")+'</b></div>')+
+   '<div class="note" style="margin-top:10px">'+(isS?'Leads are not wins. <b style="color:var(--ink)">Alaska</b> has only begun counting, and its ranked-choice tally doesn\'t start until Nov. 18, so an early lead there is not final. <b style="color:var(--ink)">Maine</b> was decided tonight without needing ranked-choice.':'California and Arizona count mail ballots for days. Close seats like these may not be called until later this week.')+'</div></div>'}
 function senStatus(r){var st=S.s[r[0]]||{},c=st.call;if(!c)return"count";var demSide=(c==="D"||c==="I");if(demSide)return r[6]==="R"?"dflip":"dhold";return r[6]==="D"?"rflip":"rhold"}
 var SGROUPS=[["dflip","Democratic pickups","var(--d)"],["rflip","Republican pickups","var(--r)"],["dhold","Democratic holds","var(--d)"],["rhold","Republican holds","var(--r)"],["count","Still counting","var(--mute)"]];
 function tallyHTML(title,big,bigcls,sub,items){
@@ -506,7 +514,7 @@ function senateHTML(){
   var cnt=function(k){return(g[k]||[]).length},net=cnt("dflip")-cnt("rflip");
   var h=meterHTML(true)+tallyHTML("Tracked Senate races",(net>0?"Democrats +"+net:net<0?"Republicans +"+(-net):"No net change yet"),net>0?"v2":net<0?"v0":"vn",
     (senHistLine(net)?senHistLine(net)+" ":"")+(cnt("dflip")?"Pickups: "+(g.dflip||[]).map(function(r){return r[0]==="NE"?"NE (Osborn, I)":r[0]}).join(", ")+".":"")+(cnt("count")?" Still counting: "+(g.count||[]).map(function(r){return r[0]}).join(", ")+".":""),
-    [[cnt("dflip"),"D pickups","var(--d)"],[cnt("dhold"),"D holds","var(--d)"],[cnt("rhold")+cnt("rflip"),"R wins","var(--r)"],[cnt("count"),"Counting","var(--ink)"]])+histCard((g.dflip||[]).map(function(r){return r[0]}),"Tonight in history")+quoteHTML();
+    [[cnt("dflip"),"D pickups","var(--d)"],[cnt("dhold"),"D holds","var(--d)"],[cnt("rhold")+cnt("rflip"),"R wins","var(--r)"],[cnt("count"),"Counting","var(--ink)"]])+histCard((g.dflip||[]).map(function(r){return r[0]}),"Tonight in history")+stillOutHTML(true)+quoteHTML();
   SGROUPS.forEach(function(gr){var rows=g[gr[0]];if(!rows||!rows.length)return;
     h+='<div class="grouphead" style="color:'+gr[2]+'">'+gr[1]+' · '+rows.length+'</div>';
     rows.forEach(function(r){
@@ -521,7 +529,7 @@ function senateHTML(){
         '<span style="display:flex;gap:6px;align-items:center;margin-left:auto"><span class="lbl">Call</span><div class="seg"><button data-s="'+r[0]+'" data-f="call" data-v="R" class="'+(st.call==="R"?"onR":"")+'">R</button><button data-s="'+r[0]+'" data-f="call" data-v="'+dl+'" class="'+(st.call===dl?(indep?"onI":"onD"):"")+'">'+dl+'</button></div></span></div></div>';
     });
   });
-  return h+'<div class="note">Maine uses ranked-choice voting if no one tops 50%, which can take days. Alaska\'s ranked-choice count starts Nov. 18.</div>';
+  return h+'<div class="note">Calls: NBC News Decision Desk, Decision Desk HQ, AP and CBS. A race moves to a win only once one of them projects it.</div>';
 }
 function houStatus(r){var v=S.h[r[0]];if(!v)return"count";return v==="D"?(r[1]==="R"?"dflip":"dhold"):(r[1]==="D"?"rflip":"rhold")}
 function houseHTML(){
@@ -529,7 +537,7 @@ function houseHTML(){
   var cnt=function(k){return(g[k]||[]).length};
   var big=pj!==null?(pj>=240?"Blue Tsunami":"Democrats at "+pj+"+"):null;
   var h=meterHTML(false)+tallyHTML("Tracked House races",big,pj!==null&&pj>=240?"v3":"v2",pj!==null?"NBC News projects Democrats will win at least "+pj+" seats"+(pj>=234?", the most House Democrats since 2008":"")+". They went in holding 215, so that is a gain of about "+(pj-215)+(pj-215>=42?", topping 2018's 41 seats, which was the biggest Democratic gain since Watergate-era 1974 (49).":", on the scale of 2018's 41 seats, the biggest Democratic gain since Watergate-era 1974 (49)."):"",
-    [[cnt("dflip"),"D flips","var(--d)"],[cnt("dhold"),"D holds","var(--d)"],[cnt("rhold")+cnt("rflip"),"R wins","var(--r)"],[cnt("count"),"Counting","var(--ink)"]])+histCard((g.dflip||[]).map(function(r){return r[0]}),"Tonight in history")+quoteHTML()+
+    [[cnt("dflip"),"D flips","var(--d)"],[cnt("dhold"),"D holds","var(--d)"],[cnt("rhold")+cnt("rflip"),"R wins","var(--r)"],[cnt("count"),"Counting","var(--ink)"]])+histCard((g.dflip||[]).map(function(r){return r[0]}),"Tonight in history")+stillOutHTML(false)+quoteHTML()+
     '<div class="note rohide" style="margin:0 2px 4px">Tap a race: blank → D → R → blank. Left stripe = party holding the seat before tonight. ★ = redrawn since 2024.</div>';
   var HG=[["dflip","Democratic flips","c3"],["rflip","Republican flips","c0"],["dhold","Democratic holds","c1"],["rhold","Republican holds","c0"],["count","Still counting","cw"]];
   HG.forEach(function(gr){var rows=g[gr[0]];if(!rows||!rows.length)return;
@@ -614,7 +622,7 @@ document.addEventListener("change",function(e){
     st[t.dataset.f]=v;st.by="you";st.t=Date.now()});
 });
 window.addEventListener("hashchange",function(){readHash();render();window.scrollTo(0,0)});
-setInterval(function(){var w=document.getElementById("tlwrap");if(w)w.innerHTML=timelineHTML();var f=document.getElementById("fresh");if(f)f.innerHTML=freshHTML()},30000);
+setInterval(function(){var f=document.getElementById("fresh");if(f)f.innerHTML=freshHTML()},30000);
 setInterval(function(){var q=document.getElementById("quote");if(q&&!document.hidden){QI=(QI+1)%QUOTES.length;q.outerHTML=quoteHTML()}},22000);
 
 var REMOTE_AT=0,POLLED=false;
