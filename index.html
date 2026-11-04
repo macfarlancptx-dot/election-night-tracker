@@ -559,7 +559,7 @@ var TAKE=[
 ["Gen Z set a record","72–25","Voters 18 to 29 backed Democratic House candidates by 47 points, the widest youth margin Tufts' CIRCLE has ever measured in a national election. In 2024 the gap was just 14 points."],
 ["Millennials moved too","60–36","Voters 30 to 44, roughly the millennial generation and a fifth of the electorate, backed Democrats by 24 points, up from a near split (about 51–47 for Harris) in 2024."],
 ["Immigration enforcement","57%","said Trump's immigration enforcement actions have gone too far."]];
-var DEMO=[["Urban","71","27"],["Suburban","58","40"],["Small town / rural","40","58"],["White women","51","47"],["White men","43","55"],["White, college degree","59","40"],["White, no degree","37","61"],["Black voters","89","9"],["Latino voters","62","35"],["Independents","56","39"]];
+var DEMO=[["Women","57","41"],["Men","48","49"],["Urban","71","27"],["Suburban","58","40"],["Small town / rural","40","58"],["White women","51","47"],["White men","43","55"],["White, college degree","59","40"],["White, no degree","37","61"],["Black voters","89","9"],["Latino voters","62","35"],["Asian American voters","70","29"],["Independents","56","39"]];
 var GERRY=[
 ["Texas","GOP redrew to gain up to 5 seats","Backfired in South Texas. Cuellar (TX-28) and Gonzalez (TX-34) held seats drawn to oust them, Pulido flipped TX-15, and Allred won the new TX-32, drawn to favor Trump by double digits."],
 ["Florida","GOP redrew to gain up to 4 seats","Backfired. Castor (FL-14) and Moskowitz (FL-25) held redrawn seats Trump won by 9 to 11 points, and Pia Dandiya won the new FL-22."],
@@ -569,14 +569,23 @@ var GERRY=[
 ["Utah","Court-ordered new Salt Lake City seat","Rated Solid D; awaiting a call."]];
 function demoHTML(){var h='<div class="card"><div class="eyebrow" style="color:var(--gold)">Who voted how</div><div class="sub">House vote by group, NBC News Exit Poll (Democrat vs. Republican).</div>';
   DEMO.forEach(function(d){var D=+d[1],R=+d[2];h+='<div style="margin-top:10px"><div style="display:flex;justify-content:space-between;font-size:13.5px"><b>'+esc(d[0])+'</b><span><b style="color:var(--d)">D '+D+'</b> · <b style="color:var(--r)">R '+R+'</b></span></div><div style="display:flex;height:8px;border-radius:5px;overflow:hidden;margin-top:4px;background:rgba(255,255,255,.06)"><div style="width:'+D+'%;background:var(--d)"></div><div style="flex:1"></div><div style="width:'+R+'%;background:var(--r)"></div></div></div>'});
-  return h+'<div class="note" style="margin-top:12px">The degree gap hit a new high: 62% of college graduates backed Democrats vs. 47% of voters without a degree, more than double the 2020 gap.</div></div>'}
+  return h+'<div class="note" style="margin-top:12px">The degree gap hit a new high: 62% of college graduates backed Democrats vs. 47% of voters without a degree, more than double the 2020 gap. Men, who backed Trump by 12 points in 2024, split almost evenly. Asian American voters shifted roughly 25 points toward Democrats from 2024.</div></div>'}
 function gerryHTML(){var h='<div class="card"><div class="eyebrow" style="color:var(--gold)">Did the gerrymanders work?</div><div class="sub">About a third of House districts were redrawn this cycle, mostly to help Republicans. Here is how the new maps held up.</div>';
   GERRY.forEach(function(g){h+='<div style="margin-top:12px"><div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:14.5px">'+esc(g[0])+'</b><span class="lbl" style="text-align:right">'+esc(g[1])+'</span></div><div style="font-size:13.5px;color:var(--mute);margin-top:3px">'+esc(g[2])+'</div></div>'});
   return h+'<div class="note" style="margin-top:12px">Why it can backfire: drawing more GOP-leaning seats spreads Republican voters thinner, so each seat has a smaller cushion in a wave year (Aubrey Jewett, University of Central Florida).</div></div>'}
+var GOV=[["Georgia","Keisha Lance Bottoms (D) flips it","She becomes the first Black woman elected governor in U.S. history."],
+["Texas","Gina Hinojosa (D) flips it","She unseats Greg Abbott to become Texas's first Democratic governor in 35 years and its first Hispanic governor."],
+["Ohio","Amy Acton (D) flips it","She defeats Vivek Ramaswamy for the open seat."],
+["Iowa","Rob Sand (D) flips it","A Democratic pickup in a state Trump won by 13 points."],
+["Wisconsin","David Crowley (D) holds it","He will be Wisconsin's first Black governor."],
+["Florida","Byron Donalds (R) holds it","He will be Florida's first Black governor, extending three decades of GOP control."]];
+function govHTML(){var h='<div class="card"><div class="eyebrow" style="color:var(--gold)">Governors</div><div style="font:800 34px var(--hd);color:var(--d);margin:4px 0">4 flips</div><div class="sub">Democrats flipped Georgia, Texas, Ohio and Iowa. Republicans went in holding 26 governorships to Democrats\' 24, and a record number of women were elected governor.</div>';
+  GOV.forEach(function(g){h+='<div style="margin-top:12px"><div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:14.5px">'+esc(g[0])+'</b><span class="lbl" style="text-align:right">'+esc(g[1])+'</span></div><div style="font-size:13.5px;color:var(--mute);margin-top:3px">'+esc(g[2])+'</div></div>'});
+  return h+'</div>'}
 function takeHTML(){
   var h='<div class="card"><div class="eyebrow">What voters told us</div><div class="verdict v2" style="font-size:26px">A vote for a check on power</div><div class="sub">Key findings from the NBC News Exit Poll and other Election Day voter surveys.</div></div>';
   TAKE.forEach(function(t){h+='<div class="card"><div class="eyebrow" style="color:var(--gold)">'+esc(t[0])+'</div>'+(t[1]?'<div style="font:800 34px var(--hd);color:var(--d);margin:4px 0">'+esc(t[1])+'</div>':'')+'<div style="font-size:14.5px;color:var(--ink)">'+esc(t[2])+'</div></div>'});
-  h+=demoHTML()+gerryHTML()+quoteHTML()+'<div class="note">Exit polls are surveys, early figures are preliminary, and they are adjusted as votes are counted. Sources: NBC News Exit Poll (with the network consortium), Tufts CIRCLE youth analysis, AP VoteCast, CNBC and Fox News pre-election polls, and NBC, Washington Post, The Hill and Ballotpedia reporting on redistricting.</div>';
+  h+=govHTML()+demoHTML()+gerryHTML()+quoteHTML()+'<div class="note">Exit polls are surveys, early figures are preliminary, and they are adjusted as votes are counted. Sources: NBC News Exit Poll (with the network consortium), Tufts CIRCLE youth analysis, AP VoteCast, the ABC News/SSRS voter poll, NBC News governor coverage, CNBC and Fox News pre-election polls, and NBC, Washington Post, The Hill and Ballotpedia reporting on redistricting.</div>';
   return h}
 function keysHTML(){
   var b=0,r=0;KEYS.forEach(function(k,i){if(S.k[i]){if(k[3]==="blue")b++;if(k[3]==="red")r++}});
