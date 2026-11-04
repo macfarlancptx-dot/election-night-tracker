@@ -556,9 +556,9 @@ var TAKE=[
 ["Voters wanted a check on power","71%","said there is not enough congressional oversight of the president, including 41% of Republicans."],
 ["Latino voters swung back","62%","of Latino voters backed Democrats for the House, up from 51% for Harris in 2024. Republicans fell from 46% to 35%, reversing the 2024 shift."],
 ["Independents broke for Democrats","56–39","Independents favored Democratic House candidates by 17 points."],
-["Young voters moved sharply","71–25","Voters 18 to 29 now identify as Democrats over Republicans by 46 points, up from 54–43 in 2024 (party identification, SSRS consortium polling)."],
-["Immigration enforcement","57%","said Trump's immigration enforcement actions have gone too far."],
-["Neither party is beloved","1 in 5","voters had a favorable view of neither party, and overall views of both parties were more unfavorable than favorable."]];
+["Gen Z set a record","72–25","Voters 18 to 29 backed Democratic House candidates by 47 points, the widest youth margin Tufts' CIRCLE has ever measured in a national election. In 2024 the gap was just 14 points."],
+["Millennials moved too","60–36","Voters 30 to 44, roughly the millennial generation and a fifth of the electorate, backed Democrats by 24 points, up from a near split (about 51–47 for Harris) in 2024."],
+["Immigration enforcement","57%","said Trump's immigration enforcement actions have gone too far."]];
 var DEMO=[["Urban","71","27"],["Suburban","58","40"],["Small town / rural","40","58"],["White women","51","47"],["White men","43","55"],["White, college degree","59","40"],["White, no degree","37","61"],["Black voters","89","9"],["Latino voters","62","35"],["Independents","56","39"]];
 var GERRY=[
 ["Texas","GOP redrew to gain up to 5 seats","Backfired in South Texas. Cuellar (TX-28) and Gonzalez (TX-34) held seats drawn to oust them, Pulido flipped TX-15, and Allred won the new TX-32, drawn to favor Trump by double digits."],
@@ -576,7 +576,7 @@ function gerryHTML(){var h='<div class="card"><div class="eyebrow" style="color:
 function takeHTML(){
   var h='<div class="card"><div class="eyebrow">What voters told us</div><div class="verdict v2" style="font-size:26px">A vote for a check on power</div><div class="sub">Key findings from the NBC News Exit Poll and other Election Day voter surveys.</div></div>';
   TAKE.forEach(function(t){h+='<div class="card"><div class="eyebrow" style="color:var(--gold)">'+esc(t[0])+'</div>'+(t[1]?'<div style="font:800 34px var(--hd);color:var(--d);margin:4px 0">'+esc(t[1])+'</div>':'')+'<div style="font-size:14.5px;color:var(--ink)">'+esc(t[2])+'</div></div>'});
-  h+=demoHTML()+gerryHTML()+quoteHTML()+'<div class="note">Exit polls are surveys, early figures are preliminary, and they are adjusted as votes are counted. Sources: NBC News Exit Poll (with the network consortium), SSRS consortium polling via TIME, AP VoteCast, CNBC and Fox News pre-election polls, and NBC, Washington Post, The Hill and Ballotpedia reporting on redistricting.</div>';
+  h+=demoHTML()+gerryHTML()+quoteHTML()+'<div class="note">Exit polls are surveys, early figures are preliminary, and they are adjusted as votes are counted. Sources: NBC News Exit Poll (with the network consortium), Tufts CIRCLE youth analysis, AP VoteCast, CNBC and Fox News pre-election polls, and NBC, Washington Post, The Hill and Ballotpedia reporting on redistricting.</div>';
   return h}
 function keysHTML(){
   var b=0,r=0;KEYS.forEach(function(k,i){if(S.k[i]){if(k[3]==="blue")b++;if(k[3]==="red")r++}});
