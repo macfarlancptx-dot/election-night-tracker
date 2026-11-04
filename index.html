@@ -605,12 +605,13 @@ window.addEventListener("hashchange",function(){readHash();render();window.scrol
 setInterval(function(){var w=document.getElementById("tlwrap");if(w)w.innerHTML=timelineHTML();var f=document.getElementById("fresh");if(f)f.innerHTML=freshHTML()},30000);
 setInterval(function(){var q=document.getElementById("quote");if(q&&!document.hidden){QI=(QI+1)%QUOTES.length;q.outerHTML=quoteHTML()}},22000);
 
-var REMOTE_AT=0;
+var REMOTE_AT=0,POLLED=false;
 function pollRemote(){
   if(!window.fetch)return;
   fetch("state.json?t="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(R){
+    var first=!POLLED;POLLED=true;
     if(!R||!R.updated||R.updated===REMOTE_AT)return;
-    var first=REMOTE_AT===0;REMOTE_AT=R.updated;
+    REMOTE_AT=R.updated;
     if(ART)return; /* on claude.ai the artifact itself is the source of truth */
     if(first&&R.updated<=S.updated&&!/netlify\.app$/.test(location.hostname))return;
     var prev=snap(),y=window.scrollY;S=norm(R);
