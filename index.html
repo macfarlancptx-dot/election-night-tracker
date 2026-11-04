@@ -277,7 +277,7 @@ function freshHTML(){
   return'<span style="color:'+(stale?"var(--gold)":"var(--mute)")+'">'+(stale?"⚠ ":"")+'Updated '+ago+' ('+ctTime(S.updated)+' CT)'+(S.auto&&S.auto.note?' · '+esc(S.auto.note):'')+(stale?' · may be out of date':'')+'</span>';
 }
 function howtoHTML(){var hide=false;try{hide=localStorage.getItem("entrackerHowto")==="1"}catch(e){}
-  if(hide||TAB==="keys")return"";
+  if(hide||TAB==="takeaways")return"";
   return'<div class="card howto"><b>How to read this:</b> races are sorted into flips, holds and still counting. A flip means the seat changed parties tonight. Tap a gold ✱ to see why a race matters. <div><button class="ghost" id="howok" style="margin:8px 0 0;padding:6px 12px">Got it</button></div></div>'}
 function esc(x){return String(x).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function buildDoc(){
@@ -454,14 +454,14 @@ function timelineHTML(){
 
 // ---------- render ----------
 var TAB="senate",QI=Math.floor(Math.random()*QUOTES.length),lastV={};
-function readHash(){var h=(location.hash||"").replace("#","");TAB=["senate","house"].indexOf(h)>=0?h:"senate"}
+function readHash(){var h=(location.hash||"").replace("#","");TAB=["senate","house","takeaways"].indexOf(h)>=0?h:"senate"}
 function rlink(q){return'<a class="rlink" href="https://www.google.com/search?q='+encodeURIComponent(q)+'">Live results ↗</a>'}
 function render(){
   var html='<header><div class="top"><h1><span>Election Night</span></h1><div style="display:flex;gap:8px;align-items:center">'+soundBtn()+'<div class="live"><i></i>LIVE</div></div></div>'+
     '<div id="tlwrap"></div>'+
     '<div class="auto" id="fresh">'+freshHTML()+'</div>'+(PUBLIC?'<div class="auto" style="color:var(--ink);font-weight:600">Live board · updated by Erika · refreshes on its own</div>':'')+
-    '<nav>'+["senate","house"].map(function(t){return'<a href="#'+t+'" class="'+(TAB===t?"on":"")+'">'+(t==="keys"?"Keys":t[0].toUpperCase()+t.slice(1))+'</a>'}).join("")+'</nav></header><main>'+bannersHTML()+howtoHTML();
-  if(TAB==="senate")html+=senateHTML();else if(TAB==="house")html+=houseHTML();else html+=keysHTML();
+    '<nav>'+["senate","house","takeaways"].map(function(t){return'<a href="#'+t+'" class="'+(TAB===t?"on":"")+'">'+(t==="takeaways"?"Takeaways":t[0].toUpperCase()+t.slice(1))+'</a>'}).join("")+'</nav></header><main>'+bannersHTML()+howtoHTML();
+  if(TAB==="senate")html+=senateHTML();else if(TAB==="house")html+=houseHTML();else html+=takeHTML();
   html+='</main>';
   document.getElementById("app").innerHTML=html;
 }
@@ -549,6 +549,20 @@ function houseHTML(){
   });
   return h+'<div class="note">These are the competitive and signal seats we tracked, not all 435. California and Arizona may take days to finish counting.</div>';
 }
+var TAKE=[
+["A referendum on Trump","43%","said opposing Trump was one reason for their vote. His approval among voters was 38%, with 62% disapproving: the lowest for any president on Election Day since 2008."],
+["The economy came first","39%","named the economy the most important issue, followed by the state of democracy at 32%. Three in four said the economy is in rough shape, and 65% said Trump's policies have made it worse."],
+["Voters wanted a check on power","71%","said there is not enough congressional oversight of the president, including 41% of Republicans. Nine in ten called corruption a crucial or major factor in their vote."],
+["Latino voters swung back","62%","of Latino voters backed Democrats for the House, up from 51% for Harris in 2024. Republicans fell from 46% to 35%, reversing the 2024 shift."],
+["Independents broke for Democrats","56–39","Independents favored Democratic House candidates by 17 points."],
+["Young voters moved sharply","71–25","Voters 18 to 29 now identify as Democrats over Republicans by 46 points, up from 54–43 in 2024 (party identification, SSRS consortium polling)."],
+["Immigration enforcement","57%","said Trump's immigration enforcement actions have gone too far."],
+["Neither party is beloved","","Voters held more unfavorable than favorable views of both parties. This was a vote against the status quo, not a blank check for Democrats."]];
+function takeHTML(){
+  var h='<div class="card"><div class="eyebrow">What voters told us</div><div class="verdict v2" style="font-size:26px">A vote for a check on power</div><div class="sub">Key findings from the NBC News Exit Poll and other Election Day voter surveys.</div></div>';
+  TAKE.forEach(function(t){h+='<div class="card"><div class="eyebrow" style="color:var(--gold)">'+esc(t[0])+'</div>'+(t[1]?'<div style="font:800 34px var(--hd);color:var(--d);margin:4px 0">'+esc(t[1])+'</div>':'')+'<div style="font-size:14.5px;color:var(--ink)">'+esc(t[2])+'</div></div>'});
+  h+=quoteHTML()+'<div class="note">Exit polls are surveys, early figures are preliminary, and they are adjusted as votes are counted. Sources: NBC News Exit Poll (with the network consortium), SSRS consortium polling via TIME, AP VoteCast.</div>';
+  return h}
 function keysHTML(){
   var b=0,r=0;KEYS.forEach(function(k,i){if(S.k[i]){if(k[3]==="blue")b++;if(k[3]==="red")r++}});
   var h='<div class="card"><div class="eyebrow">Keys that have hit</div><div class="verdict"><span style="color:var(--d)">'+b+' blue</span> <span class="vn">·</span> <span style="color:var(--r)">'+r+' red</span></div><div class="sub rohide">Tap a key when it happens.</div></div><div class="card" style="padding:0">';
