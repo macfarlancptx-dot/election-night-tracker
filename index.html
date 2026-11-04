@@ -69,6 +69,7 @@ main{padding:14px 12px 80px;max-width:760px;margin:0 auto}
 .race.isR{border-color:rgba(255,77,94,.5);box-shadow:0 0 0 1px rgba(255,77,94,.2),0 8px 30px -12px rgba(255,77,94,.55)}
 .bench{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:10px 0}
 .bench div{font-size:11.5px;text-align:center;padding:6px 2px;border-radius:8px;background:rgba(255,255,255,.06);color:var(--mute);font-weight:600;transition:all .3s}
+.bench div.soft{outline:1.5px dashed rgba(255,255,255,.45);color:var(--ink)}
 .bench div.hit{color:#fff;transform:scale(1.04);font-weight:800}
 .bench div.hit.c0{background:var(--rip);box-shadow:0 0 16px rgba(255,77,94,.5)}.bench div.hit.c1{background:var(--tide)}
 .bench div.hit.c2{background:var(--wave);box-shadow:0 0 16px rgba(61,123,255,.5)}.bench div.hit.c3{background:var(--tsu);box-shadow:0 0 18px rgba(61,123,255,.7)}
@@ -279,23 +280,25 @@ try{if(window.claude&&claude.use)claude.use("artifact").then(function(a){ART=a||
 // ---------- logic ----------
 function senMargin(st){var r=S.s[st];if(!r||r.m===""||r.m==null||isNaN(parseFloat(r.m)))return null;var m=Math.abs(parseFloat(r.m));return r.lead==="R"?-m:m}
 function senCol(row){if(!row[5])return -1;var m=senMargin(row[0]);if(m===null)return -1;var c=row[5];if(m>=c[2])return 3;if(m>=c[1])return 2;if(m>=c[0])return 1;return 0}
+function senCounts(r){var st=S.s[r[0]]||{},p=parseFloat(st.pct);return senCol(r)>=0&&(!!st.call||(!isNaN(p)&&p>=50))}
 function senState(){
   var counts=[0,0,0,0],net=0,osb=false,called=0;
-  SEN.forEach(function(r){var c=senCol(r);if(c>=0)counts[c]++;var cl=(S.s[r[0]]||{}).call;
+  SEN.forEach(function(r){var c=senCol(r);if(c>=0&&senCounts(r))counts[c]++;var cl=(S.s[r[0]]||{}).call;
     if(cl){called++;if(r[0]==="NE"){if(cl==="I")osb=true}else{if(cl==="D"&&r[6]==="R")net++;if(cl==="R"&&r[6]==="D")net--}}});
   var arr=[];counts.forEach(function(c,i){for(var j=0;j<c;j++)arr.push(i)});
-  return{counts:counts,net:net,osb:osb,called:called,tot:arr.length,v:arr.length?arr[Math.floor((arr.length-1)/2)]:-1};
+  return{counts:counts,net:net,osb:osb,called:called,tot:arr.length,v:arr.length>=3?arr[Math.floor((arr.length-1)/2)]:-1};
 }
 function houseSignal(h){var v=S.h[h[0]];if(!v)return 0;if(h[3]===0)return v==="R"?-1:0;return v==="D"?1:0}
 function houseState(){
   var cols=[[0,0],[0,0],[0,0],[0,0]];
   HOU.forEach(function(r){if(r[3]<0)return;if(S.h[r[0]]){cols[r[3]][1]++;if(houseSignal(r))cols[r[3]][0]++}});
   var reds=TESTS.filter(function(t){return S.t[t[0]]}).length+cols[0][0];
-  var level=-1;for(var i=3;i>=1;i--){if(cols[i][1]&&cols[i][0]/cols[i][1]>=0.5){level=i;break}}
+  var level=-1;for(var i=3;i>=1;i--){if(cols[i][1]>=3&&cols[i][0]/cols[i][1]>=0.5){level=i;break}}
   var v,label;
   if(reds&&level<2){v=0;label="Red Riptide signals"}
   else if(level>0){v=level;label=COLS[level]}
-  else if(cols[1][1]){v=0;label="Below Blue Tide"}
+  else if(cols[1][1]>=3){v=0;label="Below Blue Tide"}
+  else if(cols[1][1]+cols[2][1]+cols[3][1]){v=-1;label="Too early to tell"}
   else{v=-1;label="Waiting on results"}
   return{cols:cols,reds:reds,v:v,label:label};
 }
@@ -355,7 +358,7 @@ function soundBtn(){return'<button id="snd" style="border:1px solid var(--line);
 // ---------- change detection ----------
 function snap(){var sc={},hc={};SEN.forEach(function(r){var c=(S.s[r[0]]||{}).call;if(c)sc[r[0]]=c});HOU.forEach(function(r){if(S.h[r[0]])hc[r[0]]=S.h[r[0]]});
   var ss=senState(),hs=houseState(),sd=n(S.c.sd),hd=n(S.c.hd);
-  return{sc:sc,hc:hc,sv:ss.v,hv:hs.v,ctl:control(),tsS:(sd!==null&&sd>=54)||(ss.v===3&&ss.tot>=3),tsH:(hd!==null&&hd>=240)||(hs.v===3&&hs.cols[3][1]>=2)}}
+  return{sc:sc,hc:hc,sv:ss.v,hv:hs.v,ctl:control(),tsS:(sd!==null&&sd>=54)||(ss.v===3&&ss.tot>=3),tsH:(hd!==null&&hd>=240)||(hs.v===3&&hs.cols[3][1]>=3)}}
 function getSnap(){try{return JSON.parse(localStorage.getItem("entrackerSnap")||"null")}catch(e){return null}}
 function storeSnap(){try{localStorage.setItem("entrackerSnap",JSON.stringify(snap()))}catch(e){}}
 function celebrate(prev,cur,quiet){
@@ -470,8 +473,8 @@ function distBar(counts,labels){var tot=counts.reduce(function(a,b){return a+b},
   return h+'</div><div class="legend">'+labels.map(function(l){return"<span>"+l+"</span>"}).join("")+'</div>'}
 function senateHTML(){
   var z=senState();
-  var h=meterHTML(true)+'<div class="card"><div class="eyebrow">Senate is tracking toward</div><div class="verdict '+vcls(z.v)+popIf("s",z.v)+'">'+(z.v<0?"Waiting on results":COLS[z.v])+'</div>'+
-    '<div class="sub">Middle of the '+z.tot+' races with margins entered. Dems need net +4.</div>'+distBar(z.counts,["Riptide","Tide","Wave","Tsunami"])+
+  var h=meterHTML(true)+'<div class="card"><div class="eyebrow">Senate is tracking toward</div><div class="verdict '+vcls(z.v)+popIf("s",z.v)+'">'+(z.v<0?(z.tot?"Too early to tell":"Waiting on results"):COLS[z.v])+'</div>'+
+    '<div class="sub">Middle of the '+z.tot+' races with at least half the vote counted or a call (needs 3+). Dems need net +4.</div>'+distBar(z.counts,["Riptide","Tide","Wave","Tsunami"])+
     '<div class="note">Called: <b style="color:var(--ink)">'+z.called+' of 15</b> · Net D change from these calls: <b style="color:'+(z.net>0?"var(--d)":z.net<0?"var(--r)":"var(--ink)")+'">'+(z.net>0?"+":"")+z.net+'</b>'+(z.osb?' <b style="color:var(--i)">+ Osborn (I) in NE</b>':'')+'</div></div>'+quoteHTML();
   var groups={};SEN.forEach(function(r){(groups[r[2]]=groups[r[2]]||[]).push(r)});
   Object.keys(groups).forEach(function(t){
@@ -481,7 +484,7 @@ function senateHTML(){
       h+='<div class="card race'+cls+'"><div class="row1"><span class="st">'+r[0]+'<span class="ast" data-note="'+r[0]+'">✱</span></span><span class="mu">'+esc(r[1])+'</span>'+
         (st.call?'<span class="called" style="background:var(--'+(st.call==="R"?"r":st.call==="I"?"i":"d")+')">'+st.call+' WINS</span>':'<span class="rcp">'+(r[3].indexOf("polls")===0?"Polls "+r[3].slice(6):"RCP "+r[3])+'</span>')+'</div>'+
         '<div style="display:flex;gap:10px;align-items:center;margin-top:6px">'+rlink(STNAME[r[0]]+" Senate election results 2026")+(st.pct?'<span class="auto" style="padding:0">'+esc(st.pct)+'% in</span>':'')+(st.by==="auto"?'<span class="auto" style="padding:0">· auto-filled</span>':'')+'</div>'+
-        (r[4]?'<div class="bench">'+r[4].map(function(l,i){return'<div class="c'+i+(c===i?" hit":"")+'">'+l+'</div>'}).join("")+'</div>':'<div class="note" style="margin:8px 0 10px">Not on your chart, so there are no column benchmarks. Track the margin and the call. Most of Alaska closes at 11:00 CT.</div>')+
+        (r[4]?'<div class="bench">'+r[4].map(function(l,i){var on=c===i,cnt=senCounts(r);return'<div class="c'+i+(on?(cnt?" hit":" soft"):"")+'">'+l+'</div>'}).join("")+'</div>'+(c>=0&&!senCounts(r)?'<div class="note" style="margin:-4px 0 8px">Early count: shown faded, not counted until 50% is in or the race is called.</div>':''):'<div class="note" style="margin:8px 0 10px">Not on your chart, so there are no column benchmarks. Track the margin and the call. Most of Alaska closes at 11:00 CT.</div>')+
         '<div class="ctrl"><div class="seg"><button data-s="'+r[0]+'" data-f="lead" data-v="R" class="'+(st.lead==="R"?"onR":"")+'">R</button><button data-s="'+r[0]+'" data-f="lead" data-v="D" class="'+(st.lead==="D"?(indep?"onI":"onD"):"")+'">'+dl+'</button></div>'+
         '<input class="num" inputmode="decimal" placeholder="+pts" data-s="'+r[0]+'" data-f="m" value="'+esc(st.m==null?"":st.m)+'">'+
         '<input class="num" inputmode="numeric" placeholder="% in" data-s="'+r[0]+'" data-f="pct" value="'+esc(st.pct==null?"":st.pct)+'" style="width:58px">'+
@@ -493,7 +496,7 @@ function senateHTML(){
 function houseHTML(){
   var z=houseState(),cols=z.cols;
   var h=meterHTML(false)+'<div class="card"'+(z.reds?' style="border-color:rgba(255,77,94,.6)"':'')+'><div class="eyebrow">House is tracking toward</div><div class="verdict '+vcls(z.v)+popIf("h",z.v)+'">'+z.label+'</div>'+
-    '<div class="sub">Highest column where Dems have won at least half of the races decided so far.'+(z.reds?' <b style="color:var(--rip)">'+z.reds+' red signal'+(z.reds>1?"s":"")+'.</b>':'')+'</div>'+
+    '<div class="sub">Highest column where Dems have won at least half the decided races (needs 3+ decided in a column).'+(z.reds?' <b style="color:var(--rip)">'+z.reds+' red signal'+(z.reds>1?"s":"")+'.</b>':'')+'</div>'+
     distBar([cols[0][0],cols[1][0],cols[2][0],cols[3][0]],["Riptide hits","Tide D wins","Wave D wins","Tsunami D wins"])+'</div>'+vaLadderHTML()+quoteHTML()+
     '<div class="note" style="margin:0 2px 4px">Tap a race: blank → D → R → blank. Left stripe = party holding the seat. ★ = redrawn since 2024.</div>';
   var heads=[["c0","Red Riptide","GOP holds or gains"],["c1","Blue Tide","Dems 218–229"],["c2","Blue Wave","Dems 230–239"],["c3","Blue Tsunami","Dems 240+"]];
