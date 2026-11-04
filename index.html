@@ -94,6 +94,10 @@ input.num::placeholder{color:#6f7896}
 .hr .res{margin-left:auto;font-weight:800;font-size:13px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px dashed var(--line);color:var(--mute);flex:none}
 .hr .res.D{background:var(--d);color:#fff;border:0;box-shadow:0 0 12px rgba(61,123,255,.7)}.hr .res.R{background:var(--r);color:#fff;border:0;box-shadow:0 0 12px rgba(255,77,94,.6)}
 .hr.flip .id:after{content:" FLIP";font:800 9.5px Inter;letter-spacing:.08em;color:var(--gold);vertical-align:2px}
+.ro .ctrl,.ro .ctlrow,.ro #reset,.ro #confirm,.ro #demo,.ro #demo2,.ro #demo3,.ro .rohide{display:none!important}
+.ro .hr,.ro .test,.ro .key{cursor:default}
+.howto{font-size:12.5px;color:var(--mute);line-height:1.45}
+.howto b{color:var(--ink)}
 .cw{background:linear-gradient(135deg,#3a3f5c,#5a607f)}
 .ast{display:inline-flex;align-items:center;justify-content:center;margin-left:5px;width:20px;height:20px;border-radius:50%;background:rgba(255,201,74,.16);color:var(--gold);font:700 11px Inter;vertical-align:3px;cursor:pointer}
 #sheetbg{position:fixed;inset:0;background:rgba(3,6,18,.55);z-index:65;animation:fade .25s}
@@ -176,7 +180,7 @@ button.ghost{border:1px solid var(--line);background:rgba(255,255,255,.05);color
 <canvas id="fx"></canvas>
 <div id="toasts"></div>
 <div id="app"></div>
-<script id="state" type="application/json">{"updated":1793748902863,"s":{},"h":{},"hu":{},"t":{},"k":{},"c":{},"auto":{"at":"5:35 PM CT","note":"Live updates connected"}}</script>
+<script id="state" type="application/json">{"updated":0,"s":{},"h":{},"hu":{},"t":{},"k":{},"c":{},"auto":{}}</script>
 <script id="app-script">
 (function(){
 var COLS=["Red Riptide","Blue Tide","Blue Wave","Blue Tsunami"];
@@ -259,6 +263,18 @@ function norm(x){x=x||{};KEYSET.forEach(function(k){if(!x[k]||typeof x[k]!=="obj
 var S;try{S=JSON.parse(document.getElementById("state").textContent)}catch(e){S={}}S=norm(S);
 try{var L=JSON.parse(localStorage.getItem("entracker26")||"null");if(L&&L.updated>S.updated)S=norm(L)}catch(e){}
 var ART=null,pubTimer=null;
+var PUBLIC=/netlify\.app$/.test(location.hostname);
+if(PUBLIC)document.documentElement.classList.add("ro");
+function ctTime(ms){try{return new Intl.DateTimeFormat("en-US",{timeZone:"America/Chicago",hour:"numeric",minute:"2-digit"}).format(new Date(ms))}catch(e){return""}}
+function freshHTML(){
+  if(!S.updated)return'<span>No results yet. First update around 6:20 CT.</span>';
+  var mins=Math.max(0,Math.round((Date.now()-S.updated)/60000)),stale=mins>75;
+  var ago=mins<1?"just now":mins<60?mins+" min ago":Math.floor(mins/60)+" hr "+(mins%60)+" min ago";
+  return'<span style="color:'+(stale?"var(--gold)":"var(--mute)")+'">'+(stale?"⚠ ":"")+'Updated '+ago+' ('+ctTime(S.updated)+' CT)'+(S.auto&&S.auto.note?' · '+esc(S.auto.note):'')+(stale?' · may be out of date':'')+'</span>';
+}
+function howtoHTML(){var hide=false;try{hide=localStorage.getItem("entrackerHowto")==="1"}catch(e){}
+  if(hide||TAB==="keys")return"";
+  return'<div class="card howto"><b>How to read this:</b> each race falls in a column. <b style="color:var(--rip)">Red Riptide</b> = GOP holding or gaining; <b style="color:var(--tide)">Blue Tide</b>, <b style="color:var(--wave)">Wave</b> and <b style="color:#8fb2ff">Tsunami</b> = bigger and bigger Dem gains. Tap a gold ✱ to see why a race matters. Early counts are shown faded and don\'t count until half the vote is in. <div><button class="ghost" id="howok" style="margin:8px 0 0;padding:6px 12px">Got it</button></div></div>'}
 function esc(x){return String(x).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function buildDoc(){
   var json=JSON.stringify(S).replace(/</g,"\\u003c");
@@ -439,8 +455,8 @@ function rlink(q){return'<a class="rlink" href="https://www.google.com/search?q=
 function render(){
   var html='<header><div class="top"><h1><span>Election Night</span></h1><div style="display:flex;gap:8px;align-items:center">'+soundBtn()+'<div class="live"><i></i>LIVE</div></div></div>'+
     '<div id="tlwrap">'+timelineHTML()+'</div>'+
-    (S.auto&&S.auto.at?'<div class="auto">Auto-updated '+esc(S.auto.at)+(S.auto.note?' · '+esc(S.auto.note):'')+'</div>':'')+
-    '<nav>'+["senate","house","keys"].map(function(t){return'<a href="#'+t+'" class="'+(TAB===t?"on":"")+'">'+(t==="keys"?"Keys":t[0].toUpperCase()+t.slice(1))+'</a>'}).join("")+'</nav></header><main>'+bannersHTML();
+    '<div class="auto" id="fresh">'+freshHTML()+'</div>'+(PUBLIC?'<div class="auto" style="color:var(--ink);font-weight:600">Live board · updated by Erika · refreshes on its own</div>':'')+
+    '<nav>'+["senate","house","keys"].map(function(t){return'<a href="#'+t+'" class="'+(TAB===t?"on":"")+'">'+(t==="keys"?"Keys":t[0].toUpperCase()+t.slice(1))+'</a>'}).join("")+'</nav></header><main>'+bannersHTML()+howtoHTML();
   if(TAB==="senate")html+=senateHTML();else if(TAB==="house")html+=houseHTML();else html+=keysHTML();
   html+='</main>';
   document.getElementById("app").innerHTML=html;
@@ -463,7 +479,7 @@ function meterHTML(isS){
     '<div class="ctlrow"><span class="lbl" style="color:var(--d);font-weight:800">D</span><input class="num" inputmode="numeric" placeholder="—" data-c="'+(isS?"sd":"hd")+'" value="'+esc(d===null?"":d)+'">'+
     '<span class="lbl" style="color:var(--r);font-weight:800">R</span><input class="num" inputmode="numeric" placeholder="—" data-c="'+(isS?"sr":"hr")+'" value="'+esc(r===null?"":r)+'">'+
     '<span class="lbl" style="margin-left:auto">AP calls control</span><div class="seg"><button data-cc="'+cf+'" data-v="D" class="'+(c[cf]==="D"?"onD":"")+'">D</button><button data-cc="'+cf+'" data-v="R" class="'+(c[cf]==="R"?"onR":"")+'">R</button></div></div>'+
-    '<div class="note">Use AP\'s running chamber totals'+(isS?', which include seats not up this year (the two independents count with Democrats)':'')+'.</div>'+'</div>';
+    '<div class="note rohide">Use AP\'s running chamber totals'+(isS?', which include seats not up this year (the two independents count with Democrats)':'')+'.</div>'+'</div>';
 }
 function vcls(v){return v<0?"vn":"v"+v}
 function popIf(key,v){var p=lastV[key]!==undefined&&lastV[key]!==v;lastV[key]=v;return p?" pop":""}
@@ -483,7 +499,7 @@ function senateHTML(){
       var st=S.s[r[0]]||{},c=senCol(r),indep=r[0]==="NE",dl=indep?"I":"D",cls=st.call?(st.call==="R"?" isR":" isD"):"";
       h+='<div class="card race'+cls+'"><div class="row1"><span class="st">'+r[0]+'<span class="ast" data-note="'+r[0]+'">✱</span></span><span class="mu">'+esc(r[1])+'</span>'+
         (st.call?'<span class="called" style="background:var(--'+(st.call==="R"?"r":st.call==="I"?"i":"d")+')">'+st.call+' WINS</span>':'<span class="rcp">'+(r[3].indexOf("polls")===0?"Polls "+r[3].slice(6):"RCP "+r[3])+'</span>')+'</div>'+
-        '<div style="display:flex;gap:10px;align-items:center;margin-top:6px">'+rlink(STNAME[r[0]]+" Senate election results 2026")+(st.pct?'<span class="auto" style="padding:0">'+esc(st.pct)+'% in</span>':'')+(st.by==="auto"?'<span class="auto" style="padding:0">· auto-filled</span>':'')+'</div>'+
+        '<div style="display:flex;gap:10px;align-items:center;margin-top:6px">'+rlink(STNAME[r[0]]+" Senate election results 2026")+(st.pct?'<span class="auto" style="padding:0">'+esc(st.pct)+'% in</span>':'')+(st.m&&st.t?'<span class="auto" style="padding:0">as of '+ctTime(st.t)+'</span>':'')+(st.by==="auto"?'<span class="auto" style="padding:0">· auto</span>':'')+'</div>'+
         (r[4]?'<div class="bench">'+r[4].map(function(l,i){var on=c===i,cnt=senCounts(r);return'<div class="c'+i+(on?(cnt?" hit":" soft"):"")+'">'+l+'</div>'}).join("")+'</div>'+(c>=0&&!senCounts(r)?'<div class="note" style="margin:-4px 0 8px">Early count: shown faded, not counted until 50% is in or the race is called.</div>':''):'<div class="note" style="margin:8px 0 10px">Not on your chart, so there are no column benchmarks. Track the margin and the call. Most of Alaska closes at 11:00 CT.</div>')+
         '<div class="ctrl"><div class="seg"><button data-s="'+r[0]+'" data-f="lead" data-v="R" class="'+(st.lead==="R"?"onR":"")+'">R</button><button data-s="'+r[0]+'" data-f="lead" data-v="D" class="'+(st.lead==="D"?(indep?"onI":"onD"):"")+'">'+dl+'</button></div>'+
         '<input class="num" inputmode="decimal" placeholder="+pts" data-s="'+r[0]+'" data-f="m" value="'+esc(st.m==null?"":st.m)+'">'+
@@ -498,7 +514,7 @@ function houseHTML(){
   var h=meterHTML(false)+'<div class="card"'+(z.reds?' style="border-color:rgba(255,77,94,.6)"':'')+'><div class="eyebrow">House is tracking toward</div><div class="verdict '+vcls(z.v)+popIf("h",z.v)+'">'+z.label+'</div>'+
     '<div class="sub">Highest column where Dems have won at least half the decided races (needs 3+ decided in a column).'+(z.reds?' <b style="color:var(--rip)">'+z.reds+' red signal'+(z.reds>1?"s":"")+'.</b>':'')+'</div>'+
     distBar([cols[0][0],cols[1][0],cols[2][0],cols[3][0]],["Riptide hits","Tide D wins","Wave D wins","Tsunami D wins"])+'</div>'+vaLadderHTML()+quoteHTML()+
-    '<div class="note" style="margin:0 2px 4px">Tap a race: blank → D → R → blank. Left stripe = party holding the seat. ★ = redrawn since 2024.</div>';
+    '<div class="note rohide" style="margin:0 2px 4px">Tap a race: blank → D → R → blank. Left stripe = party holding the seat. ★ = redrawn since 2024.</div>';
   var heads=[["c0","Red Riptide","GOP holds or gains"],["c1","Blue Tide","Dems 218–229"],["c2","Blue Wave","Dems 230–239"],["c3","Blue Tsunami","Dems 240+"]];
   heads.push(["cw","Also watching","From Todd and DDHQ"]);
   heads.forEach(function(hd,ci){if(ci===4)ci=-1;
@@ -515,7 +531,7 @@ function houseHTML(){
 }
 function keysHTML(){
   var b=0,r=0;KEYS.forEach(function(k,i){if(S.k[i]){if(k[3]==="blue")b++;if(k[3]==="red")r++}});
-  var h='<div class="card"><div class="eyebrow">Keys that have hit</div><div class="verdict"><span style="color:var(--d)">'+b+' blue</span> <span class="vn">·</span> <span style="color:var(--r)">'+r+' red</span></div><div class="sub">Tap a key when it happens.</div></div><div class="card" style="padding:0">';
+  var h='<div class="card"><div class="eyebrow">Keys that have hit</div><div class="verdict"><span style="color:var(--d)">'+b+' blue</span> <span class="vn">·</span> <span style="color:var(--r)">'+r+' red</span></div><div class="sub rohide">Tap a key when it happens.</div></div><div class="card" style="padding:0">';
   KEYS.forEach(function(k,i){var p=k[0].replace(/(\d+)/g,function(x){var y=parseInt(x,10)-1;return String(y===0?12:y)});
     h+='<div class="key '+k[3]+(S.k[i]?" on":"")+'" data-k="'+i+'"><div class="box">'+(S.k[i]?"✓":"")+'</div><div class="t">'+p+' CT</div><div class="tx"><b>'+esc(k[1])+'</b>'+(k[2]?'<span>→ '+esc(k[2])+'</span>':'')+'</div></div>'});
   h+='</div>'+countingHTML()+quoteHTML()+'<div class="card"><b>Live results</b><div class="links"><a href="https://www.google.com/search?q=2026+election+results">Google (AP data)</a><a href="https://decisiondeskhq.com">Decision Desk HQ</a><a href="https://www.270towin.com">270toWin</a></div>'+
@@ -552,6 +568,7 @@ function after(fn){var prev=snap(),y=window.scrollY;fn();save();render();window.
 document.addEventListener("click",function(){if(SOUND)actx()},true);
 document.addEventListener("click",function(e){
   if(e.target.closest("a"))return;
+  if(e.target.closest("#howok")){try{localStorage.setItem("entrackerHowto","1")}catch(x){}render();return}
   var as=e.target.closest(".ast");if(as){e.stopPropagation();openNote(as.dataset.note);return}
   if(e.target.closest("#sheetbg,#sheet")){closeNote();return}
   if(e.target.closest("#quote")){QI=(QI+1)%QUOTES.length;var q=document.getElementById("quote");q.outerHTML=quoteHTML();return}
@@ -561,6 +578,7 @@ document.addEventListener("click",function(e){
   if(t.id==="demo4"){if(!SOUND){SOUND=true;try{localStorage.setItem("entrackerSound","1")}catch(e){}render()}actx();eagle();setTimeout(fife,1700);return}
   if(t.id==="demo2"){tsunami("house");return}
   if(t.id==="demo"){fireworks("all","med");toast("That is what a big moment looks like","G");return}
+  if(PUBLIC&&(t.dataset.s||t.dataset.h||t.dataset.t||t.dataset.k!=null||t.dataset.cc||t.id==="yes"))return;
   if(t.id==="reset"){document.getElementById("confirm").classList.add("show");return}
   if(t.id==="no"){document.getElementById("confirm").classList.remove("show");return}
   after(function(){
@@ -575,6 +593,7 @@ document.addEventListener("click",function(e){
 });
 document.addEventListener("change",function(e){
   var t=e.target;
+  if(PUBLIC)return;
   if(t.matches("input[data-c]")){after(function(){S.c[t.dataset.c]=t.value.trim()});return}
   if(!t.matches("input[data-s]"))return;
   after(function(){var st=S.s[t.dataset.s]=S.s[t.dataset.s]||{};var v=t.value.trim().replace(/^[+]/,"");
@@ -583,7 +602,7 @@ document.addEventListener("change",function(e){
     st[t.dataset.f]=v;st.by="you";st.t=Date.now()});
 });
 window.addEventListener("hashchange",function(){readHash();render();window.scrollTo(0,0)});
-setInterval(function(){var w=document.getElementById("tlwrap");if(w)w.innerHTML=timelineHTML()},30000);
+setInterval(function(){var w=document.getElementById("tlwrap");if(w)w.innerHTML=timelineHTML();var f=document.getElementById("fresh");if(f)f.innerHTML=freshHTML()},30000);
 setInterval(function(){var q=document.getElementById("quote");if(q&&!document.hidden){QI=(QI+1)%QUOTES.length;q.outerHTML=quoteHTML()}},22000);
 
 var REMOTE_AT=0;
